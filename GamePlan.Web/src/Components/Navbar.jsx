@@ -13,11 +13,17 @@ console.log(setGoalXp, setUserXp);
 
     return (
         <nav className="navbar">
-            <div className="navbarLeft">
+            <div className="leftSide">
+                    <div className="menu">burger</div>
+            </div>
+            <div className="navbarCenter">
                 <h2 className="viewMonth">{viewMonth()}</h2>
                 <h4 className="goalXp">Goal XP: {goalXp}</h4>
             </div>
-            <div>
+            <div className="navbarRight">
+                <div className="userIcon">
+                    <img src="" alt="user icon" className="userImg" />
+                </div>
                 <h3 className="userXp">User XP: {userXp}</h3>
             </div>
         </nav>

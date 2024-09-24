@@ -5,7 +5,7 @@ const AddActivity = () => {
 }
 
     return(
-        <div className="weekDay">
+        <div className="weekday">
         <div>Monday {AddActivity()}</div>
         <div>Tuesday {AddActivity()}</div>
         <div>Wednesday {AddActivity()}</div>
