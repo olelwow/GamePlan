@@ -1,0 +1,24 @@
+@mixin flexColumn {
+    display: flex;
+    flex-direction: column;
+}
+
+.mainPage {
+    @include flexColumn;
+
+    .navbar {
+        display: flex;
+        justify-content: space-around;
+        background-color: gray;
+
+    }
+
+    .weekDay {
+        @include flexColumn;
+        justify-content: space-around;
+        background-color: lightgray;
+        align-items: center;
+        gap: 10px;
+        margin: 1rem;
+    }
+}

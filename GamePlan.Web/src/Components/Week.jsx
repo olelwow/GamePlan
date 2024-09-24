@@ -1,17 +1,20 @@
 const Week = () => {
 
-    return(
-        <>
-        <div>Monday</div>
-        <div>Tuesday</div>
-        <div>Wednesday</div>
-        <div>Thursday</div>
-        <div>Friday</div>
-        <div>Saturday</div>
-        <div>Sunday</div>
-        </>
-    );
+const AddActivity = () => {
+    console.log("Add activity to weekday")
+}
 
+    return(
+        <div className="weekDay">
+        <div>Monday {AddActivity()}</div>
+        <div>Tuesday {AddActivity()}</div>
+        <div>Wednesday {AddActivity()}</div>
+        <div>Thursday {AddActivity()}</div>
+        <div>Friday {AddActivity()}</div>
+        <div>Saturday {AddActivity()}</div>
+        <div>Sunday {AddActivity()}</div>
+        </div>
+    );
 }
 
 export default Week;
