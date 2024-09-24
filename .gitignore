@@ -1,1 +1,4 @@
-.vs
+.vs/
+.vscode/
+**/[Bb]in
+**/[Oo]bj
