@@ -13,9 +13,13 @@ console.log(setGoalXp, setUserXp);
 
     return (
         <nav className="navbar">
-            <h2 className="viewMonth">{viewMonth()}</h2>
-            <h3 className="userXp">User XP: {userXp}</h3>
-            <h4 className="goalXp">Goal XP: {goalXp}</h4>
+            <div className="navbarLeft">
+                <h2 className="viewMonth">{viewMonth()}</h2>
+                <h4 className="goalXp">Goal XP: {goalXp}</h4>
+            </div>
+            <div>
+                <h3 className="userXp">User XP: {userXp}</h3>
+            </div>
         </nav>
 
     );
