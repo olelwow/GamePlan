@@ -1,18 +1,16 @@
+import Day from "./Day";
+
 const Week = () => {
 
 const AddActivity = () => {
     console.log("Add activity to weekday")
 }
 
+const weekDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+
     return(
         <div className="weekday">
-        <div>Monday {AddActivity()}</div>
-        <div>Tuesday {AddActivity()}</div>
-        <div>Wednesday {AddActivity()}</div>
-        <div>Thursday {AddActivity()}</div>
-        <div>Friday {AddActivity()}</div>
-        <div>Saturday {AddActivity()}</div>
-        <div>Sunday {AddActivity()}</div>
+            {weekDays.map(day => (<Day day={day}/>))}
         </div>
     );
 }
