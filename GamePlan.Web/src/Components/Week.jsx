@@ -1,18 +1,20 @@
 import Day from "./Day";
 
 const Week = () => {
+    const weekDays = [];
+    for (let i = 0; i < 7; i++) {
+      const date = new Date();
+      date.setDate(date.getDate() - date.getDay() + i + 1);
+      weekDays.push(date);
+    }
 
-const AddActivity = () => {
-    console.log("Add activity to weekday")
-}
-
-const weekDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-
-    return(
-        <div className="weekday">
-            {weekDays.map(day => (<Day day={day}/>))}
-        </div>
-    );
-}
+  return (
+    <div className="weekday">
+      {weekDays.map((day, index) => (
+        <Day key={index} day={day} />
+      ))}
+    </div>
+  );
+};
 
 export default Week;
