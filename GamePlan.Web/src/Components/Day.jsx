@@ -22,7 +22,7 @@ const Day = (props) => {
         const response = await fetch("https://localhost:7136/api/activities");
         const data = await response.json();
         if (expandedDay) {
-          setActivities(data);  
+          setActivities(data);
         }
       };
       fetchActivities();
@@ -30,14 +30,10 @@ const Day = (props) => {
     return () => {
       expandedDay = false;
     };
-
   }, [expandDay]);
-  
-  console.log(activities);
-  // const getActivity = () => {
-  //   useEffect 
-  //   })
-  // } 
+
+  const dayWednesday = props.day.getDay() === 3;
+  const daySaturday = props.day.getDay() === 6;
 
   const AddActivity = () => {
     console.log(`Lägg till aktivitet ${TodaysDate()}`);
@@ -49,6 +45,14 @@ const Day = (props) => {
       {expandDay && (
         <div>
           <p>Aktivitet för {TodaysDate()}</p>
+          {dayWednesday &&
+            activities.find((activity) => activity.name === "Study") && (
+              <p>Idag är det Study</p>
+            )}
+          {daySaturday &&
+            activities.find((activity) => activity.name === "Gym") && (
+              <p>Idag är det Gym</p>
+            )}
           <button onClick={AddActivity}>Lägg till aktivitet</button>
         </div>
       )}
