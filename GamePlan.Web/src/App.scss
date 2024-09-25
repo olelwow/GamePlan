@@ -1,42 +1,59 @@
 @mixin flexColumn {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 @mixin flexRow {
-    display: flex;
-    flex-direction: row;
+  display: flex;
+  flex-direction: row;
 }
 
-
 .mainPage {
-    @include flexColumn;
+  @include flexColumn;
 
-    .navbar {
-        display: flex;
-        justify-content: space-around;
-        background-color: gray;
-        align-items: center;
-
-        .navbarRight{
-            @include flexColumn;
-
-            .userIcon{
-                width: 20px;
-                height: 20px;
-                border-radius: 100%;
-                background-color: chocolate;
-            }
-
-
-        }
+  .navbar {
+    display: flex;
+    justify-content: space-around;
+    background-color: gray;
+    align-items: center;
+    .navbarLeft {
+      .burgerMenu {
+        cursor: pointer;
+      }
     }
+    .navbarRight {
+      @include flexColumn;
+      position: relative;
 
-    .weekday {
+      .userContainer {
         @include flexColumn;
-        justify-content: space-around;
-        background-color: lightgray;
         align-items: center;
-        gap: 10px;
-        margin: 1rem;
+
+        .userImg {
+          width: 50px;
+          border-radius: 50%;
+          cursor: pointer;
+        }
+        .userDropdown {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          background-color: #fff;
+          box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+          border-radius: 4px;
+          width: 6em;
+          z-index: 1;
+          padding: 10px;
+        }
+      }
     }
+  }
+
+  .weekday {
+    @include flexColumn;
+    justify-content: space-around;
+    background-color: lightgray;
+    align-items: center;
+    gap: 10px;
+    margin: 1rem;
+  }
 }

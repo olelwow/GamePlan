@@ -1,35 +1,43 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import UserMenu from "./NavbarComponents/UserMenu";
+import BurgerMenu from "./NavbarComponents/BurgerMenu";
 
 const Navbar = () => {
-    const viewMonth = () => {
-        const date = new Date();
-        const month = date.toLocaleString('default', { month: 'long' });
-        return month;
-    }
-    const [userXp, setUserXp] = useState(0);
-    const [goalXp, setGoalXp] = useState(100);
+  const [goalXp, setGoalXp] = useState(100);
+  const [user, setUser] = useState({});
 
-console.log(setGoalXp, setUserXp);
+  const viewMonth = () => {
+    const date = new Date();
+    const month = date.toLocaleString("default", { month: "long" });
+    return month;
+  };
 
-    return (
-        <nav className="navbar">
-            <div className="leftSide">
-                    <div className="menu">burger</div>
-            </div>
-            <div className="navbarCenter">
-                <h2 className="viewMonth">{viewMonth()}</h2>
-                <h4 className="goalXp">Goal XP: {goalXp}</h4>
-            </div>
-            <div className="navbarRight">
-                <div className="userIcon">
-                    <img src="" alt="user icon" className="userImg" />
-                </div>
-                <h3 className="userXp">User XP: {userXp}</h3>
-            </div>
-        </nav>
+  // Get user object from api
+  const getUser = async () => {
+    const res = await fetch("https://localhost:7136/api/users/2");
+    const data = await res.json();
 
-    );
+    setUser(data);
+  };
 
-}
+  useEffect(() => {
+    getUser();
+    console.log("using effect");
+  }, []);
+
+  return (
+    <nav className="navbar">
+      <div className="navbarLeft">
+        <BurgerMenu />
+      </div>
+      <div className="navbarCenter">
+        <h2 className="viewMonth">{viewMonth()}</h2>
+        <h4 className="goalXp">Goal XP: {goalXp}</h4>
+      </div>
+      <div className="navbarRight">
+        <UserMenu {...user} />
+      </div>
+    </nav>
+  );
+};
 export default Navbar;
-
