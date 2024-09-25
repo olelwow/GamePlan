@@ -12,8 +12,6 @@ namespace GamePlan.Api.Endpoints
         private const string _tagActivities = "Activities";
         public static void MapUserEndpoints(this IEndpointRouteBuilder app)
         {
-
-
             app.MapGet("/api/users/{id}", GetUserById)
                 .WithOpenApi()
                 .WithDescription("Get user by id")
@@ -26,28 +24,40 @@ namespace GamePlan.Api.Endpoints
                 .WithTags(_tagUser)
                 .WithSummary("Endpoint to get all users");
 
+            app.MapPost("/api/users", AddUser)
+                .WithOpenApi()
+                .WithDescription("Add a new user")
+                .WithTags(_tagUser)
+                .WithSummary("Endpoint to add new user");
+
         }
 
-        static async Task<User> GetUserById(GamePlanContext context, int id)
+        static async Task<IResult> GetUserById(GamePlanContext context, int id)
         {
             var user = await context.Users.FindAsync(id);
             if (user == null)
             {
-                throw new Exception($"The user with id: {id} is not found");
+                return Results.NotFound($"The user with id: {id} is not found");
             }
-
-            return user;
+            return Results.Ok(user);
         }
 
 
-        static async Task<List<User>> GetAllUsers(GamePlanContext context)
+        static async Task<IResult> GetAllUsers(GamePlanContext context)
         {
             var allUsers = await context.Users.ToListAsync();
             if (allUsers == null || allUsers.Count == 0)
             {
-                throw new Exception($"There are no users in the database");
+                return Results.NotFound($"There are no users in the database");
             }
-            return allUsers;
+            return Results.Ok(allUsers);
+        }
+
+        static async Task<IResult> AddUser(GamePlanContext context, User user)
+        {
+            context.Users.Add(user);
+            await context.SaveChangesAsync();
+            return Results.Created($"/api/users/{user.Id}", user);
         }
 
     }
