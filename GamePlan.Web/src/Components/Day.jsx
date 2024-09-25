@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 const Day = (props) => {
   const [expandDay, setExpandDay] = useState(false);
+  const [activities, setActivities] = useState([]);
 
   const TodaysDate = () => {
     const date = new Date();
@@ -12,9 +13,27 @@ const Day = (props) => {
     return todaysDate;
   };
 
+  //useeffect to fetch activities and display them when the
+  //day is expanded and wanting to add activity to that day, show as a list or something.
   useEffect(() => {
-    fetch ('http://localhost:5173/')
-  }, [])
+    let expandedDay = true;
+    if (expandDay) {
+      const fetchActivities = async () => {
+        const response = await fetch("https://localhost:7136/api/activities");
+        const data = await response.json();
+        if (expandedDay) {
+          setActivities(data);  
+        }
+      };
+      fetchActivities();
+    }
+    return () => {
+      expandedDay = false;
+    };
+
+  }, [expandDay]);
+  
+  console.log(activities);
   // const getActivity = () => {
   //   useEffect 
   //   })
