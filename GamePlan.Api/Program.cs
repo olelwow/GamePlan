@@ -1,6 +1,7 @@
 using GamePlan.Api.Db;
 using Microsoft.EntityFrameworkCore;
 using GamePlan.Api.Db.Models;
+using GamePlan.Api.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddDbContext<GamePlanContext>(options =>
 options.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=GamePlanDB"));
@@ -30,7 +32,11 @@ if (app.Environment.IsDevelopment())
 app.UseCors("AllowAll");
 app.UseHttpsRedirection();
 
+// Activities endpoints call
 app.MapGet("/api/activities", GetAllActivities);
+
+// User endpoints call
+app.MapUserEndpoints();
 
 async Task<List<Activity>> GetAllActivities(GamePlanContext db)
 {
