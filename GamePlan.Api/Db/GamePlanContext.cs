@@ -5,16 +5,13 @@ namespace GamePlan.Api.Db
 {
     public class GamePlanContext : DbContext
     {
-        public GamePlanContext()
+        public GamePlanContext(DbContextOptions option) : base(option)
         {
            
         }
         public DbSet<User> Users { get; set; }
         public DbSet<Activity> Activities { get; set; }
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=GamePlanDB");
-        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().HasData(
