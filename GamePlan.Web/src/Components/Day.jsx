@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const Day = (props) => {
   const [expandDay, setExpandDay] = useState(false);
@@ -11,6 +11,14 @@ const Day = (props) => {
     });
     return todaysDate;
   };
+
+  useEffect(() => {
+    fetch ('http://localhost:5173/')
+  }, [])
+  // const getActivity = () => {
+  //   useEffect 
+  //   })
+  // } 
 
   const AddActivity = () => {
     console.log(`Lägg till aktivitet ${TodaysDate()}`);
