@@ -20,9 +20,9 @@ namespace GamePlan.Api.Db
                 new User {Id = 3, UserName = "PartilleJohnny", Password = "Partille4Life", Level = 10, Xp = 200}
             );
             modelBuilder.Entity<Activity>().HasData(
-                new Activity {Id = 1, Name = "Gym", Xp = 6969, Date = new DateOnly() },
-                new Activity {Id = 2, Name = "Clean bathroom", Xp = 6969, Date = new DateOnly() },
-                new Activity {Id = 3, Name = "Study", Xp = 6969, Date = new DateOnly()}
+                new Activity { Id = 1, Name = "Gym", Xp = 6969, Date = new DateTime(2024, 9, 25) },
+                 new Activity { Id = 2, Name = "Clean bathroom", Xp = 6969, Date = new DateTime(2024, 9, 26) },
+                 new Activity { Id = 3, Name = "Study", Xp = 6969, Date = new DateTime(2024, 9, 27) }
             );
         }
     }
