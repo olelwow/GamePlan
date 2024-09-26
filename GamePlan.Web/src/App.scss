@@ -13,7 +13,11 @@
   .navbar {
     display: flex;
     justify-content: space-around;
-    background-color: gray;
+    background-color: rgba(119, 119, 119, 0.361);
+    background-image: url(./assets/images/Background_main.png);
+    background-size: 20em;
+    background-repeat: repeat-x;
+
     align-items: center;
     .navbarLeft {
       .burgerMenu {
