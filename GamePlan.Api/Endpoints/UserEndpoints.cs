@@ -3,6 +3,7 @@ using GamePlan.Api.Db.Models;
 using GamePlan.Api.Db;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
+using GamePlan.Api.Db.DTOs;
 
 namespace GamePlan.Api.Endpoints
 {
@@ -53,8 +54,14 @@ namespace GamePlan.Api.Endpoints
             return Results.Ok(allUsers);
         }
 
-        static async Task<IResult> AddUser(GamePlanContext context, User user)
+        static async Task<IResult> AddUser(GamePlanContext context, CreateUserDto userDto)
         {
+            var user = new User
+            {
+                UserName = userDto.UserName,
+                Password = userDto.Password
+            };
+
             context.Users.Add(user);
             await context.SaveChangesAsync();
             return Results.Created($"/api/users/{user.Id}", user);
