@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import ArrowDown from "../assets/images/arrowDown.png";
+import ArrowUp from "../assets/images/arrowUp.png";
 
 const Day = (props) => {
   const [expandDay, setExpandDay] = useState(false);
@@ -39,14 +41,46 @@ const Day = (props) => {
     console.log(`Lägg till aktivitet ${TodaysDate()}`);
   };
 
+  const RemoveActivity = () => {
+    console.log(`Ta bort aktivitet ${TodaysDate()}`);
+  }
+
+const [onClick, setOnClick] = useState(false);
+const [borderRadius, setBorderRadius] = useState('5px');
+
+function handleClick() {
+  setOnClick(prevState => !prevState);
+  setBorderRadius(onClick ? '5px' : '5px 5px 0px 0px');
+}
+
   return (
     <>
-      <button className="day" onClick={() => setExpandDay(!expandDay)}>{TodaysDate()}<p>3st</p>
+      <button 
+      style={
+         {borderRadius: borderRadius} 
+        }
+      className="day" 
+      onClick={
+        function () 
+        {
+          setExpandDay(!expandDay),
+          handleClick()
+        }}>
+        {TodaysDate()}
+        <p>3st</p>
+        <img 
+          src={onClick ?  ArrowUp : ArrowDown} 
+          alt="arrow" 
+          className="arrow" 
+        />
       </button>
       
       {expandDay && (
-        <div id="dayContent">
-          <p>Aktivitet för {TodaysDate()}</p>
+        <div 
+        id="dayContent"
+        
+        >
+          <p className="activitySummary">Aktivitet för {TodaysDate()}</p>
           {dayWednesday &&
             activities.find((activity) => activity.name === "Study") && (
               <p>Idag är det Study</p>
@@ -55,7 +89,18 @@ const Day = (props) => {
             activities.find((activity) => activity.name === "Gym") && (
               <p>Idag är det Gym</p>
             )}
-          <button onClick={AddActivity}>Lägg till aktivitet</button>
+            <div className="buttonContainer">
+              <button
+                className="addButton" 
+              onClick=
+              {AddActivity}> + 
+                </button>
+              {activities && <button
+                className="removeButton" 
+              onClick=
+              {RemoveActivity}> - 
+              </button>}
+          </div>
         </div>
       )}
     </>
