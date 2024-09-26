@@ -5,7 +5,9 @@
         public int Id { get; set; }
         public string? Name { get; set; }
         public int? Xp { get; set; }
+        public bool Completed { get; set; }
         public DateTime Date { get; set; }
-        public List<User>? User { get; set; } = new List<User>();
+        public int UserId { get; set; }
+        public User User { get; set; }
     }
 }

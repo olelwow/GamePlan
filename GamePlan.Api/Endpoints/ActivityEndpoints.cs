@@ -21,6 +21,12 @@ namespace GamePlan.Api.Endpoints
                 .WithTags("Activity")
                 .WithSummary("Endpoint to get all activities");
 
+            app.MapGet("/api/users/{userId}/activities", GetActivitiesByUser)
+                .WithOpenApi()
+                .WithDescription("Get all activities by specific user")
+                .WithTags("Activity")
+                .WithSummary("Endpoint to get all activities by specific user");
+
             app.MapPost("/api/activities/", AddActivity)
                 .WithOpenApi()
                 .WithDescription("Add new activity")
@@ -39,13 +45,42 @@ namespace GamePlan.Api.Endpoints
                 .WithTags("Activity")
                 .WithSummary("Endpoint to delete an activity");
         }
+
+        static async Task<IResult> GetActivitiesByUser(GamePlanContext context, int userId)
+        {
+            var user = await context.Users.FindAsync(userId);
+            if (user == null)
+            {
+                return Results.NotFound($"User not found");
+            }
+
+            var activities = await context.Activities
+                .Where(user => user.UserId == userId)
+                .ToListAsync();
+
+            if (activities == null || activities.Count == 0)
+            {
+                return Results.NotFound("No activities found");
+            }
+
+            return Results.Ok(activities);
+        }
+
         static async Task<IResult> AddActivity(GamePlanContext context, CreateActivityDto activityDto)
         {
+            var user = await context.Users.FindAsync(activityDto.UserId);
+            if (user == null)
+            {
+                return Results.NotFound($"User not found");
+            }
+
             var activity = new Activity
             {
                 Name = activityDto.Name,
                 Xp = activityDto.Xp,
-                Date = activityDto.Date
+                Completed = false,
+                Date = activityDto.Date,
+                UserId = activityDto.UserId
             };
 
             context.Activities.Add(activity);
@@ -71,7 +106,6 @@ namespace GamePlan.Api.Endpoints
                 return Results.NotFound($"The activity with id: {id} is not found");
             }
 
-            await context.SaveChangesAsync();
             return Results.Ok(activity);
         }
 

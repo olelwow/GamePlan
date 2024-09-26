@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using GamePlan.Api.Db.DTOs;
 using Microsoft.AspNetCore.Mvc;
+using FluentValidation;
 
 namespace GamePlan.Api.Endpoints
 {
@@ -80,7 +81,9 @@ namespace GamePlan.Api.Endpoints
 
         static async Task<IResult> GetUserById(GamePlanContext context, int id)
         {
-            var user = await context.Users.FindAsync(id);
+            var user = await context.Users
+                .Include(user => user.Activites)
+                .FirstOrDefaultAsync(user => user.Id == id);
             if (user == null)
             {
                 return Results.NotFound(UserNotFound(id));
@@ -90,7 +93,9 @@ namespace GamePlan.Api.Endpoints
 
         static async Task<IResult> GetAllUsers(GamePlanContext context)
         {
-            var allUsers = await context.Users.ToListAsync();
+            var allUsers = await context.Users
+                .Include(user => user.Activites)
+                .ToListAsync();
             if (allUsers == null || allUsers.Count == 0)
             {
                 return Results.NotFound($"There are no users in the database");
@@ -98,12 +103,20 @@ namespace GamePlan.Api.Endpoints
             return Results.Ok(allUsers);
         }
 
-        static async Task<IResult> AddUser(GamePlanContext context, CreateUserDto userDto)
+        static async Task<IResult> AddUser(GamePlanContext context, CreateUserDto userDto, IValidator<CreateUserDto> validator)
         {
+            var validationResult = await validator.ValidateAsync(userDto);
+            if (!validationResult.IsValid)
+            {
+                return Results.BadRequest(validationResult.Errors);
+            }
+
             var user = new User
             {
                 UserName = userDto.UserName,
-                Password = userDto.Password
+                Password = userDto.Password,
+                Xp = 0,
+                Level = 1
             };
 
             context.Users.Add(user);
