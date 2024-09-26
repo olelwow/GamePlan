@@ -40,10 +40,12 @@ const Day = (props) => {
   };
 
   return (
-    <div className="day">
-      <button onClick={() => setExpandDay(!expandDay)}>{TodaysDate()}</button>
+    <>
+      <button className="day" onClick={() => setExpandDay(!expandDay)}>{TodaysDate()}<p>3st</p>
+      </button>
+      
       {expandDay && (
-        <div>
+        <div id="dayContent">
           <p>Aktivitet för {TodaysDate()}</p>
           {dayWednesday &&
             activities.find((activity) => activity.name === "Study") && (
@@ -56,7 +58,7 @@ const Day = (props) => {
           <button onClick={AddActivity}>Lägg till aktivitet</button>
         </div>
       )}
-    </div>
+    </>
   );
 };
 

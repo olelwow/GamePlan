@@ -8,15 +8,34 @@
   background-color: gray;
   align-items: center;
 }
+.mainPage .navbar .navbarLeft .burgerMenu {
+  cursor: pointer;
+}
 .mainPage .navbar .navbarRight {
   display: flex;
   flex-direction: column;
+  position: relative;
 }
-.mainPage .navbar .navbarRight .userIcon {
-  width: 20px;
-  height: 20px;
-  border-radius: 100%;
-  background-color: chocolate;
+.mainPage .navbar .navbarRight .userContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.mainPage .navbar .navbarRight .userContainer .userImg {
+  width: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.mainPage .navbar .navbarRight .userContainer .userDropdown {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background-color: #fff;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  width: 6em;
+  z-index: 1;
+  padding: 10px;
 }
 .mainPage .weekday {
   display: flex;
@@ -26,4 +45,24 @@
   align-items: center;
   gap: 10px;
   margin: 1rem;
+}
+.mainPage .day {
+  display: flex;
+  flex-direction: row;
+  width: 50%;
+  height: 2rem;
+  border: none;
+  background-color: rgb(81, 146, 148);
+  cursor: pointer;
+  align-items: baseline;
+  justify-content: space-between;
+}
+.mainPage #dayContent {
+  background-color: cadetblue;
+  width: 50%;
+  padding: 0;
+  margin: -10px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+  border-radius: 0 0 5px 5px;
 }/*# sourceMappingURL=App.css.map */
