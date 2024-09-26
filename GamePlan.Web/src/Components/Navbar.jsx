@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import UserMenu from "./NavbarComponents/UserMenu";
 import BurgerMenu from "./NavbarComponents/BurgerMenu";
+import NavbarBackground from "../assets/images/Background_main.png";
 
 const Navbar = () => {
   const [goalXp, setGoalXp] = useState(100);
@@ -14,7 +15,7 @@ const Navbar = () => {
 
   // Get user object from api
   const getUser = async () => {
-    const res = await fetch("https://localhost:7136/api/users/2");
+    const res = await fetch("https://localhost:7136/api/users/3");
     const data = await res.json();
 
     setUser(data);

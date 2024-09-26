@@ -4,6 +4,7 @@ using GamePlan.Api.Db;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using GamePlan.Api.Db.DTOs;
+using Microsoft.AspNetCore.Mvc;
 
 namespace GamePlan.Api.Endpoints
 {
@@ -13,6 +14,12 @@ namespace GamePlan.Api.Endpoints
         private const string _tagActivities = "Activities";
         public static void MapUserEndpoints(this IEndpointRouteBuilder app)
         {
+            app.MapPost("/api/users", AddUser)
+                .WithOpenApi()
+                .WithDescription("Add a new user")
+                .WithTags(_tagUser)
+                .WithSummary("Endpoint to add new user");
+
             app.MapGet("/api/users/{id}", GetUserById)
                 .WithOpenApi()
                 .WithDescription("Get user by id")
@@ -25,12 +32,50 @@ namespace GamePlan.Api.Endpoints
                 .WithTags(_tagUser)
                 .WithSummary("Endpoint to get all users");
 
-            app.MapPost("/api/users", AddUser)
+            app.MapPut("/api/users/{id}", UpdateUserXpById)
                 .WithOpenApi()
-                .WithDescription("Add a new user")
+                .WithDescription("Update xp for user by id")
                 .WithTags(_tagUser)
-                .WithSummary("Endpoint to add new user");
+                .WithSummary("Endpoint to update the xp value for the user with the specified id");
 
+            app.MapDelete("/api/users/{id}", DeleteUserById)
+                .WithOpenApi()
+                .WithDescription("Delete user by id")
+                .WithTags(_tagUser)
+                .WithSummary("Endpoint to delete the specified user from the database.");
+        }
+
+        private static async Task<IResult> UpdateUserXpById(GamePlanContext context, int id, UpdateUserXpDto userDto)
+        {
+            var currentUser = await context.Users.FindAsync(id);
+            if (currentUser == null)
+            {
+                return Results.NotFound(UserNotFound(id));
+            }
+
+            currentUser.Xp += userDto.Xp;
+
+            if (currentUser.Xp >= 200) 
+            { 
+                currentUser.Level++;
+                currentUser.Xp -= 200;
+            };
+
+            await context.SaveChangesAsync();
+            return Results.Ok(currentUser);
+        }
+
+        private static async Task<IResult> DeleteUserById(GamePlanContext context, int id)
+        {
+            var user = await context.Users.FindAsync(id);
+            if (user == null)
+            {
+                return Results.NotFound(UserNotFound(id));
+            }
+            context.Remove(user);
+            await context.SaveChangesAsync();
+
+            return Results.Ok(user);
         }
 
         static async Task<IResult> GetUserById(GamePlanContext context, int id)
@@ -38,7 +83,7 @@ namespace GamePlan.Api.Endpoints
             var user = await context.Users.FindAsync(id);
             if (user == null)
             {
-                return Results.NotFound($"The user with id: {id} is not found");
+                return Results.NotFound(UserNotFound(id));
             }
             return Results.Ok(user);
         }
@@ -65,6 +110,11 @@ namespace GamePlan.Api.Endpoints
             context.Users.Add(user);
             await context.SaveChangesAsync();
             return Results.Created($"/api/users/{user.Id}", user);
+        }
+
+        static string UserNotFound (int id)
+        {
+            return $"The user with id: {id} was not found";
         }
 
     }
