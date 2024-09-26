@@ -75,16 +75,16 @@ namespace GamePlan.Api.Endpoints
             return Results.Ok(activity);
         }
 
-        static async Task<IResult> UpdateActivity(GamePlanContext context, int id, Activity updatedActivity)
+        static async Task<IResult> UpdateActivity(GamePlanContext context, int id, UpdateActivityDto activityDto)
         {
             var activity = await context.Activities.FindAsync(id);
             if (activity == null)
             {
                 return Results.NotFound($"The activity with id: {id} is not found");
             }
-            activity.Name = updatedActivity.Name;
-            activity.Xp = updatedActivity.Xp;
-            activity.Date = updatedActivity.Date;
+            activity.Name = activityDto.Name;
+            activity.Xp = activityDto.Xp;
+            activity.Date = activityDto.Date;
             
             context.Activities.Update(activity);
             await context.SaveChangesAsync();
