@@ -88,7 +88,6 @@ namespace GamePlan.Api.Endpoints
             return Results.Ok(user);
         }
 
-
         static async Task<IResult> GetAllUsers(GamePlanContext context)
         {
             var allUsers = await context.Users.ToListAsync();
@@ -116,6 +115,5 @@ namespace GamePlan.Api.Endpoints
         {
             return $"The user with id: {id} was not found";
         }
-
     }
 }
