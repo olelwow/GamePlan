@@ -23,9 +23,21 @@ namespace GamePlan.Api.Endpoints
 
             app.MapPost("/api/activities/", AddActivity)
                 .WithOpenApi()
-                .WithDescription("Add new activitie")
+                .WithDescription("Add new activity")
                 .WithTags("Activity")
                 .WithSummary("Endpoint to add a new activity");
+
+                app.MapPut("/api/activities/{id}", UpdateActivity)
+                .WithOpenApi()
+                .WithDescription("Update an activity")
+                .WithTags("Activity")
+                .WithSummary("Endpoint to update an activity");
+
+            app.MapDelete("/api/activities/{id}", DeleteActivity)
+                .WithOpenApi()
+                .WithDescription("Delete an activity")
+                .WithTags("Activity")
+                .WithSummary("Endpoint to delete an activity");
         }
         static async Task<IResult> AddActivity(GamePlanContext context, CreateActivityDto activityDto)
         {
@@ -58,6 +70,36 @@ namespace GamePlan.Api.Endpoints
             {
                 return Results.NotFound($"The activity with id: {id} is not found");
             }
+
+            await context.SaveChangesAsync();
+            return Results.Ok(activity);
+        }
+
+        static async Task<IResult> UpdateActivity(GamePlanContext context, int id, UpdateActivityDto activityDto)
+        {
+            var activity = await context.Activities.FindAsync(id);
+            if (activity == null)
+            {
+                return Results.NotFound($"The activity with id: {id} is not found");
+            }
+            activity.Name = activityDto.Name;
+            activity.Xp = activityDto.Xp;
+            activity.Date = activityDto.Date;
+            
+            context.Activities.Update(activity);
+            await context.SaveChangesAsync();
+            return Results.Ok(activity);
+        }
+
+        static async Task<IResult> DeleteActivity(GamePlanContext context, int id)
+        {
+            var activity = await context.Activities.FindAsync(id);
+            if (activity == null)
+            {
+                return Results.NotFound($"The activity with id: {id} is not found");
+            }
+            context.Activities.Remove(activity);
+            await context.SaveChangesAsync();
             return Results.Ok(activity);
         }
     }
