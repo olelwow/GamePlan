@@ -4,7 +4,7 @@ import BurgerMenu from "./NavbarComponents/BurgerMenu";
 import NavbarBackground from "../assets/images/Background_main.png";
 
 const Navbar = () => {
-  const [goalXp, setGoalXp] = useState(100);
+  const [goalXp, setGoalXp] = useState(200);
   const [user, setUser] = useState({});
 
   const viewMonth = () => {
@@ -33,7 +33,11 @@ const Navbar = () => {
       </div>
       <div className="navbarCenter">
         <h2 className="viewMonth">{viewMonth()}</h2>
-        <h4 className="goalXp">Goal XP: {goalXp}</h4>
+        <div className="goal" style={xpBar(user.xp / 2)}>
+          <p>
+            Weekly goal: {user.xp}/{goalXp}
+          </p>
+        </div>
       </div>
       <div className="navbarRight">
         <UserMenu {...user} />
@@ -41,4 +45,10 @@ const Navbar = () => {
     </nav>
   );
 };
+
+const xpBar = (percentage) => ({
+  backgroundColor: "rgb(255, 255, 255)",
+  backgroundImage: `linear-gradient(to right, rgb(43, 255, 0) ${percentage}%, rgba(0, 0, 0, 0) ${percentage}%)`,
+});
+
 export default Navbar;
