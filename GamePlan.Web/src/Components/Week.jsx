@@ -1,5 +1,4 @@
 import Day from "./Day";
-import User from "./User";
 
 
 const Week = () => {
@@ -12,7 +11,6 @@ const Week = () => {
 
   return (
     <>
-      <User />
     <div className="weekday">
       {weekDays.map((day, index) => (
         <Day key={index} day={day} />
