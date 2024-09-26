@@ -30,7 +30,6 @@ namespace GamePlan.Api.Endpoints
                 .WithDescription("Add a new user")
                 .WithTags(_tagUser)
                 .WithSummary("Endpoint to add new user");
-
         }
 
         static async Task<IResult> GetUserById(GamePlanContext context, int id)
@@ -42,7 +41,6 @@ namespace GamePlan.Api.Endpoints
             }
             return Results.Ok(user);
         }
-
 
         static async Task<IResult> GetAllUsers(GamePlanContext context)
         {
@@ -66,6 +64,5 @@ namespace GamePlan.Api.Endpoints
             await context.SaveChangesAsync();
             return Results.Created($"/api/users/{user.Id}", user);
         }
-
     }
 }

@@ -8,8 +8,13 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new()
+    {
+        Title = "GamePlan API",
+    });
+});
 
 builder.Services.AddDbContext<GamePlanContext>(options =>
 options.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=GamePlanDB"));
@@ -33,14 +38,9 @@ app.UseCors("AllowAll");
 app.UseHttpsRedirection();
 
 // Activities endpoints call
-app.MapGet("/api/activities", GetAllActivities);
+app.MapActivityEndpoints();
 
 // User endpoints call
 app.MapUserEndpoints();
-
-async Task<List<Activity>> GetAllActivities(GamePlanContext db)
-{
-    return await db.Activities.ToListAsync();
-}
 
 app.Run();
