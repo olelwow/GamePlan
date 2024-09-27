@@ -2,6 +2,9 @@ using GamePlan.Api.Db;
 using Microsoft.EntityFrameworkCore;
 using GamePlan.Api.Db.Models;
 using GamePlan.Api.Endpoints;
+using FluentValidation;
+using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Http.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,12 +22,19 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddDbContext<GamePlanContext>(options =>
 options.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=GamePlanDB"));
 
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
+
 builder.Services.AddCors(options =>
     options.AddPolicy("AllowAll", policy =>
        policy.AllowAnyOrigin()
        .AllowAnyMethod()
        .AllowAnyHeader()
     ));
+
+builder.Services.Configure<JsonOptions>(options =>
+{
+    options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+});
 
 var app = builder.Build();
 
@@ -37,10 +47,8 @@ if (app.Environment.IsDevelopment())
 app.UseCors("AllowAll");
 app.UseHttpsRedirection();
 
-// Activities endpoints call
+// Endpoints
 app.MapActivityEndpoints();
-
-// User endpoints call
 app.MapUserEndpoints();
 
 app.Run();
