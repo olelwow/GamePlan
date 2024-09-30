@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import UserMenu from "./NavbarComponents/UserMenu";
 import BurgerMenu from "./NavbarComponents/BurgerMenu";
 import NavbarBackground from "../assets/images/Background_main.png";
+import Week from "./Week";
 
 const Navbar = () => {
   const [goalXp, setGoalXp] = useState(200);
@@ -12,22 +13,6 @@ const Navbar = () => {
     const date = new Date();
     const month = date.toLocaleString("default", { month: "long" });
     return month;
-  };
-
-  const getWeekNumber = (d) => {
-    d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-    d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
-    var yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
-    var weekNo = Math.ceil(((d - yearStart) / 86400000 + 1) / 7);
-    return [d.getFullYear(), weekNo];
-  }
-
-  const handleNextWeek = () => {
-    setWeekNumber(prevWeek => prevWeek + 1);
-  };
-
-  const handlePrevWeek = () => {
-    setWeekNumber(prevWeek => prevWeek - 1);
   };
 
   // Get user object from api
