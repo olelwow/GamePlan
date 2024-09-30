@@ -31,11 +31,6 @@ builder.Services.AddCors(options =>
        .AllowAnyHeader()
     ));
 
-builder.Services.Configure<JsonOptions>(options =>
-{
-    options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-});
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

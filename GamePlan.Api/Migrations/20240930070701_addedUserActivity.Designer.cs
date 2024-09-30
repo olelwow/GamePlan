@@ -4,6 +4,7 @@ using GamePlan.Api.Db;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GamePlan.Api.Migrations
 {
     [DbContext(typeof(GamePlanContext))]
-    partial class GamePlanContextModelSnapshot : ModelSnapshot
+    [Migration("20240930070701_addedUserActivity")]
+    partial class addedUserActivity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -134,11 +137,13 @@ namespace GamePlan.Api.Migrations
 
             modelBuilder.Entity("GamePlan.Api.Db.Models.Activity", b =>
                 {
-                    b.HasOne("GamePlan.Api.Db.Models.User", null)
+                    b.HasOne("GamePlan.Api.Db.Models.User", "User")
                         .WithMany("Activites")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("GamePlan.Api.Db.Models.User", b =>
