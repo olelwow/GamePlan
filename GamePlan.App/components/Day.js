@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import ArrowDown from "../assets/images/arrowDown.png";
 import ArrowUp from "../assets/images/arrowUp.png";
-import { Button, Image, View, Text } from "react-native";
+import { Button, Image, View, Text, StyleSheet } from "react-native";
 
 const Day = (props) => {
   const [expandDay, setExpandDay] = useState(false);
@@ -69,7 +69,7 @@ const Day = (props) => {
           <Image
             source={onPress ? ArrowUp : ArrowDown}
             alt="arrow"
-            className="arrow"
+            styles ={style.arrow}
           />
         </View>
       </Button>
@@ -102,3 +102,9 @@ const Day = (props) => {
 };
 
 export default Day;
+
+const style = StyleSheet.create({
+  day: {
+
+  },
+});
