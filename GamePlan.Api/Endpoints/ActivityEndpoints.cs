@@ -2,6 +2,8 @@ using GamePlan.Api.Db.Models;
 using GamePlan.Api.Db;
 using Microsoft.EntityFrameworkCore;
 using GamePlan.Api.Db.DTOs;
+using FluentValidation;
+using GamePlan.Api.Validators;
 
 namespace GamePlan.Api.Endpoints
 {
@@ -66,8 +68,18 @@ namespace GamePlan.Api.Endpoints
             return Results.Ok(activities);
         }
 
-        static async Task<IResult> AddActivity(GamePlanContext context, CreateActivityDto activityDto)
+        static async Task<IResult> AddActivity(
+            GamePlanContext context,
+            CreateActivityDto activityDto,
+            IValidator<CreateActivityDto> validator)
         {
+            var validationResult = await validator.ValidateAsync(activityDto);
+
+            if (!validationResult.IsValid)
+            {
+                return Results.BadRequest(validationResult.Errors);
+            }
+
             var user = await context.Users.FindAsync(activityDto.UserId);
             if (user == null)
             {
@@ -109,8 +121,19 @@ namespace GamePlan.Api.Endpoints
             return Results.Ok(activity);
         }
 
-        static async Task<IResult> UpdateActivity(GamePlanContext context, int id, UpdateActivityDto activityDto)
+        static async Task<IResult> UpdateActivity
+            (GamePlanContext context,
+            int id,
+            UpdateActivityDto activityDto,
+            IValidator<UpdateActivityDto> validator)
         {
+            var validationResult = await validator.ValidateAsync(activityDto);
+
+            if (!validationResult.IsValid)
+            {
+                return Results.BadRequest(validationResult.Errors);
+            }
+
             var activity = await context.Activities.FindAsync(id);
             if (activity == null)
             {
