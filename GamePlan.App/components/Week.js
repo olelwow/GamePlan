@@ -1,13 +1,10 @@
 import Day from "./Day";
 import { View } from "react-native";
+import { WeekContext } from "../context/WeekContext";
+import { useContext } from "react";
 
 const Week = () => {
-  const weekDays = [];
-  for (let i = 0; i < 7; i++) {
-    const date = new Date();
-    date.setDate(date.getDate() - date.getDay() + i + 1);
-    weekDays.push(date);
-  }
+  const { weekDays } = useContext(WeekContext);
 
   return (
     <View className="weekday">
