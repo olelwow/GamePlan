@@ -4,7 +4,9 @@ import ArrowUp from "../assets/images/arrowUp.png";
 
 const Day = (props) => {
   const [expandDay, setExpandDay] = useState(false);
-  const [activities, setActivities] = useState([]);
+  const [activities, setActivities] = useState([{}])
+  const [isClicked, setIsClicked] = useState(false);
+  const [isSelected, setIsSelected] = useState(false);
 
   const TodaysDate = () => {
     const date = new Date();
@@ -21,7 +23,7 @@ const Day = (props) => {
     let expandedDay = true;
     if (expandDay) {
       const fetchActivities = async () => {
-        const response = await fetch("https://localhost:7136/api/activities");
+        const response = await fetch("https://localhost:7136/api/activities/");
         const data = await response.json();
         if (expandedDay) {
           setActivities(data);
@@ -37,9 +39,30 @@ const Day = (props) => {
   const dayWednesday = props.day.getDay() === 3;
   const daySaturday = props.day.getDay() === 6;
 
-  const AddActivity = () => {
-    console.log(`Lägg till aktivitet ${TodaysDate()}`);
+  const AddActivity = async () => {
+    setIsClicked(prevState => !prevState);
   };
+    
+  const SaveActivity = async (obj) => {
+    const res = await fetch("https://localhost:7136/api/activities/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(obj),
+    });
+
+    if (!res.ok){
+      console.log("Error when saving activity");
+    }
+    console.log("Activity saved");
+  }
+
+  function handleChange(event){
+    setIsSelected(event.target.value);
+  }
+    
+
 
   const RemoveActivity = () => {
     console.log(`Ta bort aktivitet ${TodaysDate()}`);
@@ -92,9 +115,25 @@ function handleClick() {
             <div className="buttonContainer">
               <button
                 className="addButton" 
-              onClick=
-              {AddActivity}> + 
-                </button>
+                onClick= {AddActivity}>
+                  + 
+              </button>
+                {isClicked &&
+                <div>                
+                  <select onChange={handleChange}>
+                    {activities.map((activity) => (
+                      <option 
+                      key={activity.id}
+                      value={activity.name}
+                      >
+                        {activity.name}
+                        </option>
+                    ))}
+                  </select>
+                  <button onClick={() => SaveActivity(isSelected)}>Save</button>
+                </div>
+                }
+
               {activities && <button
                 className="removeButton" 
               onClick=

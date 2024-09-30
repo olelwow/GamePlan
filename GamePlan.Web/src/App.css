@@ -3,13 +3,35 @@
   flex-direction: column;
 }
 .mainPage .navbar {
-  display: flex;
-  justify-content: space-around;
-  background-color: gray;
+  background-color: rgba(119, 119, 119, 0.361);
+  background-image: url(./assets/images/Background_main.png);
+  background-size: 20em;
+  background-repeat: repeat-x;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 1fr;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  justify-items: center;
   align-items: center;
 }
 .mainPage .navbar .navbarLeft .burgerMenu {
   cursor: pointer;
+}
+.mainPage .navbar .navbarCenter .viewMonth {
+  text-align: center;
+}
+.mainPage .navbar .navbarCenter .goal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 2rem;
+  width: 25rem;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+  border: 2px solid black;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
 }
 .mainPage .navbar .navbarRight {
   display: flex;
@@ -22,20 +44,90 @@
   align-items: center;
 }
 .mainPage .navbar .navbarRight .userContainer .userImg {
-  width: 50px;
+  width: 60px;
+  aspect-ratio: 1;
+  border: 2px solid black;
   border-radius: 50%;
   cursor: pointer;
 }
 .mainPage .navbar .navbarRight .userContainer .userDropdown {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  background-color: #fff;
+  top: -2em;
+  background-color: rgb(176, 196, 222);
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 4px;
-  width: 6em;
+  width: 9.5rem;
   z-index: 1;
-  padding: 10px;
+}
+.mainPage .navbar .navbarRight .userContainer .userDropdown .userInfo {
+  text-align: center;
+}
+.mainPage .navbar .navbarRight .userContainer .userDropdown .userInfo .userDetails {
+  display: flex;
+  flex-direction: column;
+}
+.mainPage .navbar .navbarRight .userContainer .userDropdown .userInfo .userDetails hr {
+  width: 50%;
+  height: 2px;
+  border: none;
+  color: black;
+}
+.mainPage .navbar .navbarRight .userContainer .userDropdown .userInfo .userDetails .userH3 {
+  min-width: 3rem;
+}
+.mainPage .navbar .navbarRight .userContainer .userDropdown .userInfo .userDetails .userLevel {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+}
+.mainPage .navbar .navbarRight .userContainer .userDropdown .userInfo .userDetails .userLevel .levelIcon {
+  height: 30px;
+  aspect-ratio: 1;
+}
+.mainPage .navbar .navbarRight .userContainer .userDropdown .userInfo .userDetails .userXp {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+}
+.mainPage .navbar .navbarRight .userContainer .userDropdown .userInfo .userDetails .userXp .xpIcon {
+  height: 30px;
+  aspect-ratio: 1;
+  border-radius: 5px;
+}
+.mainPage .navbar .navbarRight .userContainer .userDropdown .userInfo .userDetails .tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
+}
+.mainPage .navbar .navbarRight .userContainer .userDropdown .userInfo .userDetails .tooltip .tooltipText {
+  visibility: hidden;
+  width: 2rem;
+  background-color: black;
+  color: white;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
+}
+.mainPage .navbar .navbarRight .userContainer .userDropdown .userInfo .userDetails .tooltip:hover .tooltipText {
+  visibility: visible;
+}
+.mainPage .navbar .navbarRight .userContainer .userDropdown .dropdownList {
+  list-style: none;
+  padding: 0;
+  text-align: center;
+}
+.mainPage .navbar .navbarRight .userContainer .userDropdown .dropdownList .dropdownItem {
+  margin-top: 0.5em;
+  padding: 0.5em;
+  background-color: rgba(240, 248, 255, 0.264);
+  border-radius: 20px;
+}
+.mainPage .navbar .navbarRight .userContainer .userDropdown .dropdownList .dropdownItem:hover {
+  background-color: rgb(155, 161, 166);
 }
 .mainPage .weekday {
   display: flex;
