@@ -1,12 +1,13 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import Navbar from './components/Navbar';
+import { StatusBar } from "expo-status-bar";
+import { StyleSheet, Text, View } from "react-native";
+import Navbar from "./components/Navbar";
+import Week from "./components/Week";
 
 export default function App() {
   return (
     <View style={styles.container}>
       <Navbar />
-      <Text>Open up App.js to start working on your app! Hej Jonas!</Text>
+      <Week />
       <StatusBar style="auto" />
     </View>
   );
@@ -15,8 +16,8 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
