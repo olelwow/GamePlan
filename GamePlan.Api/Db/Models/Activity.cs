@@ -1,4 +1,6 @@
-﻿namespace GamePlan.Api.Db.Models
+﻿using System.Text.Json.Serialization;
+
+namespace GamePlan.Api.Db.Models
 {
     public class Activity
     {
@@ -8,6 +10,7 @@
         public bool Completed { get; set; }
         public DateTime Date { get; set; }
         public int UserId { get; set; }
+        [JsonIgnore]
         public User User { get; set; }
     }
 }

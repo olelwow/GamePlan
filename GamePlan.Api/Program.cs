@@ -31,10 +31,10 @@ builder.Services.AddCors(options =>
        .AllowAnyHeader()
     ));
 
-builder.Services.Configure<JsonOptions>(options =>
-{
-    options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-});
+//builder.Services.Configure<JsonOptions>(options =>
+//{
+//    options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+//});
 
 var app = builder.Build();
 
