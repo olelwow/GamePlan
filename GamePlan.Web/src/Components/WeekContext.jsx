@@ -1,8 +1,8 @@
 import React, { createContext, useState, useEffect } from 'react';
 
 export const WeekContext = createContext();
-
-export const WeekProvider = ({ children }) => {
+    
+    export const WeekProvider = ({ children }) => {
     const [weekNumber, setWeekNumber] = useState(null);
     const [currentDate, setCurrentDate] = useState(new Date());
     const [weekDays, setWeekDays] = useState([]);
@@ -25,8 +25,8 @@ export const WeekProvider = ({ children }) => {
     const updateWeekDays = () => {
         const days = [];
         for (let i = 0; i < 7; i++) {
-            const newDate = new Date(date);
-            newDate.setDate(newDate.getDate() - date.getDay() + i + 1);
+            const newDate = new Date();
+            newDate.setDate(newDate.getDate() - newDate.getDay() + i + 1);
             days.push(newDate);
         }
         setWeekDays(days);

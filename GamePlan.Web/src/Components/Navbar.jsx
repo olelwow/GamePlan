@@ -3,11 +3,12 @@ import UserMenu from "./NavbarComponents/UserMenu";
 import BurgerMenu from "./NavbarComponents/BurgerMenu";
 import NavbarBackground from "../assets/images/Background_main.png";
 import Week from "./Week";
+import { WeekProvider } from "./WeekContext";
+
 
 const Navbar = () => {
   const [goalXp, setGoalXp] = useState(200);
   const [user, setUser] = useState({});
-  const [weekNumber, setWeekNumber] = useState(null);
 
   const viewMonth = () => {
     const date = new Date();
@@ -25,9 +26,6 @@ const Navbar = () => {
 
   useEffect(() => {
     getUser();
-    const date = new Date();
-    const [year, week] = getWeekNumber(date);
-    setWeekNumber(week);
     console.log("using effect");
   }, []);
 
@@ -38,9 +36,9 @@ const Navbar = () => {
       </div>
       <div className="navbarCenter">
         <h2 className="viewMonth">{viewMonth()}</h2>
-        <h2 className="viewWeek">{weekNumber}</h2>
-        <button onClick={handlePrevWeek}>Prev</button>
-        <button onClick={handleNextWeek}>Next</button>
+
+        <button onClick={WeekProvider.handlePrevWeek}>Previous</button>
+        <button onClick={WeekProvider.handleNextWeek}>Next</button>
         <div className="goal" style={xpBar(user.xp / 2)}>
           <p>
             Weekly goal: {user.xp}/{goalXp}
