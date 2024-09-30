@@ -2,14 +2,17 @@ import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 import Navbar from "./components/Navbar";
 import Week from "./components/Week";
+import WeekProvider from "./context/WeekContext";
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Navbar />
-      <Week />
-      <StatusBar style="auto" />
-    </View>
+    <WeekProvider>
+      <View style={styles.container}>
+        <Navbar />
+        <Week />
+        <StatusBar style="auto" />
+      </View>
+    </WeekProvider>
   );
 }
 
