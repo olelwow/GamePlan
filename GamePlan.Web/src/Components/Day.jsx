@@ -3,6 +3,12 @@ import ArrowDown from "../assets/images/arrowDown.png";
 import ArrowUp from "../assets/images/arrowUp.png";
 
 const Day = (props) => {
+  const activityList = [
+    { id: 1, name: "Study", xp: 10, date: "", userId: 0 },
+    { id: 2, name: "Workout", xp: 20, date: "", userId: 0 },
+    { id: 3, name: "Clean Bathroom", xp: 15, date: "", userId: 0 },
+  ];
+
   let objectifiedDay = new Date(props.day);
   let convertedDate = objectifiedDay.toISOString().split("T")[0];
 
@@ -10,9 +16,10 @@ const Day = (props) => {
   const [activities, setActivities] = useState([]);
   const [user, setUser] = useState([]);
   const [userActivities, setUserActivities] = useState([]);
-  const [isClicked, setIsClicked] = useState(false);
+  const [addIsClicked, setAddIsClicked] = useState(false);
+  const [removeIsClicked, setRemoveIsClicked] = useState(false);
   const [selectedActivityId, setSelectedActivityId] = useState("");
-  const [date, setDate] = useState(props.day);
+  const [actCount, setActCount] = useState();
 
   // states for styling
   const [onClick, setOnClick] = useState(false);
@@ -31,36 +38,49 @@ const Day = (props) => {
   useEffect(() => {
     let expandedDay = true;
     if (expandDay) {
-      const fetchActivities = async () => {
-        const response = await fetch("https://localhost:7136/api/activities/");
-        const data = await response.json();
-        if (expandedDay) {
-          setActivities(data);
-          getUser();
-        }
-      };
-      fetchActivities();
+      setActivities(activityList);
+      // const fetchActivities = async () => {
+      //   const response = await fetch("https://localhost:7136/api/activities/");
+      //   const data = await response.json();
+      //   if (expandedDay) {
+      //     setActivities(data);
+      //   }
+      // };
+      // fetchActivities();
     }
     return () => {
       expandedDay = false;
     };
   }, [expandDay]);
 
-  // get the current logged in user
+  // useeffect for fetching things on load
+  useEffect(() => {
+    const fetchData = async () => {
+      getDaysActivities();
+      await getUser();
+    };
+    fetchData();
+  }, [2]);
+
+  // gets the current logged in user
   async function getUser() {
-    const activityList = await fetch(
-      "https://localhost:7136/api/users/3/activities"
-    );
-    const person = await fetch("https://localhost:7136/api/users/3");
-    const data = await activityList.json();
-    const userData = await person.json();
-    setUserActivities(data);
-    setUser(userData);
+    try {
+      const response = await fetch(
+        "https://localhost:7136/api/users/3/activities"
+      );
+      const responseData = await response.json();
+      const person = await fetch("https://localhost:7136/api/users/3");
+      const userData = await person.json();
+      setUserActivities(responseData);
+      setUser(userData);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   // handles the click on the add activity button
-  const AddActivity = async () => {
-    setIsClicked((prevState) => !prevState);
+  const AddActivity = () => {
+    setAddIsClicked((prevState) => !prevState);
   };
 
   //function that saves an activity on the user to the database
@@ -80,15 +100,14 @@ const Day = (props) => {
   }
 
   //function that get the selected option from the select list
-  function handleChange(event) {
+  function handleAddChange(event) {
     setSelectedActivityId(event.target.value);
   }
 
   //function that handles the submit of the
   //form and saves the activity to the user
-  function handleSubmit(event) {
+  function handleAddSubmit(event) {
     event.preventDefault();
-    getUser();
     //iterate the activities and find the selected activity
     const activityArray = activities;
     let selectedActivity;
@@ -101,20 +120,65 @@ const Day = (props) => {
     SaveActivity({
       name: selectedActivity.name,
       xp: selectedActivity.xp,
-      date: date,
+      date: props.day,
       userId: user.id,
     });
   }
 
-  //function that removes an activity from the user
+  // function that saves the selected option to the state
+  function handleRemoveChange(event) {
+    setSelectedActivityId(event.target.value);
+  }
+
+  //function that expands the activity list
   const RemoveActivity = () => {
-    console.log(`Ta bort aktivitet ${TodaysDate()}`);
+    setRemoveIsClicked((prevState) => !prevState);
   };
+
+  //function that removes an activity from the user
+  async function handleRemoveSubmit(event) {
+    event.preventDefault();
+    const response = await fetch(
+      `https://localhost:7136/api/activities/${selectedActivityId}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id: selectedActivityId }),
+      }
+    );
+    if (!response.ok) {
+      console.log("Error when removing activity");
+    } else {
+      console.log("Activity removed");
+    }
+    const newRes = await fetch("https://localhost:7136/api/activities");
+    const newResponse = await newRes.json();
+    if (!newRes.ok) {
+      SaveActivity({
+        name: "",
+        xp: 0,
+        date: props.day,
+        userId: 0,
+      });
+    }
+  }
 
   //handles the states of these elements to change the styling
   function handleClick() {
     setOnClick((prevState) => !prevState);
     setBorderRadius(onClick ? "5px" : "5px 5px 0px 0px");
+  }
+  function getDaysActivities() {
+    try {
+      const res = userActivities?.filter((activity) => {
+        return activity.date.split("T")[0] === convertedDate;
+      });
+      setActCount(res.length);
+    } catch (error) {
+      console.log(error.message);
+    }
   }
 
   return (
@@ -122,13 +186,12 @@ const Day = (props) => {
       <button
         style={{ borderRadius: borderRadius }}
         className="day"
-        // name={props.day}
         onClick={function () {
           setExpandDay(!expandDay), handleClick();
         }}
       >
         {TodaysDate()}
-        <p>3st</p>
+        <p>{actCount}</p>
         <img
           src={onClick ? ArrowUp : ArrowDown}
           alt="arrow"
@@ -157,24 +220,21 @@ const Day = (props) => {
             <button className="addButton" onClick={AddActivity}>
               +
             </button>
-            {isClicked && (
-              <form onSubmit={handleSubmit}>
-                <select onChange={handleChange}>
-                  <option value="" disabled>
-                    Select an activity
-                  </option>
+            {addIsClicked && (
+              <form onSubmit={handleAddSubmit}>
+                <select onChange={handleAddChange}>
+                  <option value="0">Select activity</option>
                   {activities.map((activity) => (
                     <option
                       key={activity.id}
                       value={activity.id}
                       name={activity}
                     >
-                      {activity.name}
+                      {activity.name} {activity.xp} XP{" "}
                     </option>
                   ))}
                 </select>
                 <button type="submit">Save</button>
-                {/* () => SaveActivity(isSelected) */}
               </form>
             )}
 
@@ -183,6 +243,24 @@ const Day = (props) => {
                 {" "}
                 -
               </button>
+            )}
+            {removeIsClicked && (
+              <form onSubmit={handleRemoveSubmit}>
+                <select onChange={handleRemoveChange}>
+                  <option value="0">Select activity</option>
+                  {userActivities.map((activity) => (
+                    <option
+                      key={activity.id}
+                      value={activity.id}
+                      name={activity}
+                    >
+                      {activity.name} {activity.xp} XP{" "}
+                      {activity.date.split("T")[0]}
+                    </option>
+                  ))}
+                </select>
+                <button type="submit">Save</button>
+              </form>
             )}
           </div>
         </div>
