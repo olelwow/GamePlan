@@ -1,4 +1,4 @@
-import { Text, Image, View, FlatList, SectionList, StyleSheet, TouchableOpacity } from "react-native";
+import { Text, Image, View, FlatList, SectionList, StyleSheet, Pressable } from "react-native";
 import { useState } from "react";
 import fishSteer from "../assets/images/fishSteer.gif";
 import levelIcon from "../assets/images/levelIcon.png";
@@ -17,7 +17,7 @@ const UserMenu = (props) => {
       {isDropdownOpen ? (
         <View style={styles.userDropdown}>
           <View style={styles.userInfo}>
-            <TouchableOpacity onPress={toggleDropdown}>
+            <Pressable onPress={toggleDropdown}>
 
             <Image
               source={fishSteer}
@@ -25,7 +25,7 @@ const UserMenu = (props) => {
               style={styles.userImg}
               
               />
-              </TouchableOpacity>
+              </Pressable>
             <Text>{props.userName}</Text>
             <View style={styles.userDetails}>
               <View style={styles.userLevel}>
@@ -56,13 +56,13 @@ const UserMenu = (props) => {
           </View>
         </View>
       ) : (
-        <TouchableOpacity onPress={toggleDropdown}>
+        <Pressable onPress={toggleDropdown}>
             <Image
               source={fishSteer}
               alt="user icon"
               style={styles.userImg}
               />
-              </TouchableOpacity>
+              </Pressable>
       )}
     </View>
   );

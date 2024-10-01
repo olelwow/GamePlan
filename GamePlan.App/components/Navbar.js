@@ -23,18 +23,11 @@ const Navbar = () => {
     setMonth,
   } = useContext(WeekContext);
 
-  //   const viewMonth = () => {
-  //     const date = new Date();
-  //     let month = date.toLocaleString("default", { month: "long" });
-  //     month = month.charAt(0).toUpperCase() + month.slice(1);
-
-  //     return month;
-  //   };
-
   // Get user object from api
   const getUser = async () => {
     const res = await fetch("https://localhost:7136/api/users/3");
     const data = await res.json();
+    console.log("user data: ", data);
 
     setUser(data);
   };
@@ -107,7 +100,7 @@ const styles = StyleSheet.create({
   },
   navbarLeft: {
     flex: 1,
-    gap: "1rem",
+    gap: 1,
   },
   navbarCenter: {
     flex: 2,
