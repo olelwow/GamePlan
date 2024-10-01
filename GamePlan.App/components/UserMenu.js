@@ -1,4 +1,4 @@
-import { Text, Image, View, FlatList, SectionList } from "react-native";
+import { Text, Image, View, FlatList, SectionList, StyleSheet, TouchableOpacity } from "react-native";
 import { useState } from "react";
 import fishSteer from "../assets/images/fishSteer.gif";
 import levelIcon from "../assets/images/levelIcon.png";
@@ -13,49 +13,97 @@ const UserMenu = (props) => {
   };
 
   return (
-    <View className="userContainer">
+    <View style={styles.userContainer}>
       {isDropdownOpen ? (
-        <View className="userDropdown">
-          <View className="userInfo">
+        <View style={styles.userDropdown}>
+          <View style={styles.userInfo}>
+            <TouchableOpacity onPress={toggleDropdown}>
+
             <Image
               source={fishSteer}
               alt="user icon"
-              className="userImg"
-              // onClick={toggleDropdown}
-            />
+              style={styles.userImg}
+              
+              />
+              </TouchableOpacity>
             <Text>{props.userName}</Text>
-            <View className="userDetails">
-              <View className="userLevel">
-                <Image className="levelIcon" source={levelIcon} alt="level" />
-                <Text className="userH3">{props.level}</Text>
+            <View style={styles.userDetails}>
+              <View style={styles.userLevel}>
+                <Image style={styles.levelIcon} 
+                source={levelIcon} 
+                alt="level" 
+                />
+                <Text style={styles.userH3}>{props.level}</Text>
               </View>
-              <View className="userXp">
+              <View style={styles.userXp}>
                 <Image
-                  className="xpIcon"
+                  // style={xpIcon}
                   source={experienceIcon}
                   alt="experience"
                 />
-                <Text className="userH3">{props.xp}</Text>
+                <Text style={styles.userH3}>{props.xp}</Text>
               </View>
             </View>
           </View>
-          <SectionList className="dropdownList">
+          <View style={styles.dropdownList}>
             {menuOptions.map((item) => (
-              <View className="dropdownItem" key={item}>
+              <View 
+              // style={dropdownItem} 
+              key={item}>
                 <Text>{item}</Text>
               </View>
             ))}
-          </SectionList>
+          </View>
         </View>
       ) : (
-        <Image
-          source={fishSteer}
-          alt="user icon"
-          className="userImg"
-          // onClick={toggleDropdown}
-        />
+        <TouchableOpacity onPress={toggleDropdown}>
+            <Image
+              source={fishSteer}
+              alt="user icon"
+              style={styles.userImg}
+              />
+              </TouchableOpacity>
       )}
     </View>
   );
 };
 export default UserMenu;
+
+const styles = StyleSheet.create({
+  userContainer: {
+    flex:1,
+    justifyContent: 'center',
+    alignContent: 'center',
+  },
+  userImg: {
+    position: 'relative',
+    width: 60,
+    height: 60,
+    borderWidth: 2,
+    borderColor: 'black',
+    borderRadius: 30,
+  },
+  userInfo: {
+    textAlign: 'center',
+  },
+  userDetails: {
+    flex: 1,
+  },
+  userDropdown: {
+  },
+  hr: {
+    
+  },
+  userH3: {
+
+  },
+  dropdownList: {
+
+  },
+  dropdownItem: {
+
+  },
+
+
+  
+});
