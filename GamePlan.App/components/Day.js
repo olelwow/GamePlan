@@ -12,6 +12,7 @@ const Day = (props) => {
     const todaysDate = props.day.toLocaleDateString("sv-SE", {
       weekday: "long",
       day: "numeric",
+      month: "numeric",
     });
     return todaysDate;
   };
@@ -65,7 +66,7 @@ const Day = (props) => {
           <Image
             source={expandDay ? ArrowUp : ArrowDown}
             alt="arrow"
-            style={styles.arrow}
+            styles={style.arrow}
           />
         </View>
       </Pressable>
