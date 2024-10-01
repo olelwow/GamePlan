@@ -20,7 +20,7 @@ const Day = (props) => {
   //day is expanded and wanting to add activity to that day, show as a list or something.
   const fetchActivities = async () => {
     const response = await fetch(
-      `https://localhost:7136/api/users/${props.user.user}/activities`
+      `https://localhost:7136/api/users/${props.user}/activities`
     );
 
     const data = await response.json();

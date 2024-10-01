@@ -1,5 +1,8 @@
 import { useState } from "react";
 import { WeekProvider } from './Components/WeekContext'
+import Navbar from './Components/Navbar'
+import Week from './Components/Week'
+import './App.css'
 
 function App() {
   const [user, setUser] = useState(1);
