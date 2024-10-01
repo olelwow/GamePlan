@@ -8,6 +8,7 @@ const WeekProvider = ({ children }) => {
   const [weekNumber, setWeekNumber] = useState(0);
   const [month, setMonth] = useState("");
   const [year, setYear] = useState(0);
+  const [once, setOnce] = useState(false);
 
   const increaseWeekNumber = () => {
     setWeekNumber((prevState) => (prevState + 1 > 52 ? 1 : prevState + 1));
@@ -17,12 +18,28 @@ const WeekProvider = ({ children }) => {
     setWeekNumber((prevState) => (prevState - 1 < 1 ? 52 : prevState - 1));
   };
 
-  const getCurrentMonth = () => {
-    const date = new Date();
+  const changeMonth = (weekDays) => {
+    const displayedDays = weekDays.map((m) => getCurrentMonth(m));
+
+    const isSameMonth = (shit) => {
+      const halfLength = Math.floor(shit.length / 2);
+      return shit.every((value) => value === shit[halfLength]);
+    };
+
+    const middleDay = displayedDays[Math.floor(displayedDays.length / 2)];
+
+    if (isSameMonth(displayedDays)) {
+      return middleDay;
+    } else {
+      return displayedDays[4];
+    }
+  };
+
+  const getCurrentMonth = (date) => {
     let month = date.toLocaleString("default", { month: "long" });
     month = month.charAt(0).toUpperCase() + month.slice(1);
 
-    setMonth(month);
+    return month;
   };
 
   const getCurrentWeek = (d) => {
@@ -35,6 +52,7 @@ const WeekProvider = ({ children }) => {
     return result[1];
   };
 
+  // get dates of the week, calculated from weeknumber & year
   const getDatesOfCurrentWeek = (weekNumber, year) => {
     const firstDayOfYear = new Date(year, 0, 1);
     const dayOfWeek = firstDayOfYear.getDay();
@@ -53,18 +71,24 @@ const WeekProvider = ({ children }) => {
     setWeekDays(daysOfWeek);
   };
 
+  // initial setup of states.
   useEffect(() => {
-    getCurrentMonth();
+    setMonth(getCurrentMonth(new Date()));
     const currentWeek = getCurrentWeek(new Date());
     const currentYear = new Date().getFullYear();
     setWeekNumber(currentWeek);
     getDatesOfCurrentWeek(currentWeek, currentYear);
     setYear(currentYear);
-  }, []);
+  }, [once]);
 
+  // Update the dates if the weeknumber/year/weekdays are changed.
   useEffect(() => {
     getDatesOfCurrentWeek(weekNumber, year);
   }, [weekNumber]);
+
+  useEffect(() => {
+    setMonth(changeMonth(weekDays));
+  }, [weekDays]);
 
   return (
     <WeekContext.Provider
