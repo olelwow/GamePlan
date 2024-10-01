@@ -44,10 +44,9 @@ const Navbar = () => {
       <div className="navbarCenter">
         <h2 className="viewMonth">{viewMonth()}</h2>
         <WeekProvider>
-          <span>Week {weekNumber}</span>
-          <br />
-          <button onClick={decreaseWeekNumber}>Previous</button>
-          <button onClick={increaseWeekNumber}>Next</button>
+          <button className ="btn-weekNumber" onClick={decreaseWeekNumber}>Föregående</button>
+          <span className="weekDay">Vecka {weekNumber}</span>
+          <button className ="btn-weekNumber" onClick={increaseWeekNumber}>Nästa</button>
         </WeekProvider>
         <div className="goal" style={xpBar(user.xp / 2)}>
           <p>

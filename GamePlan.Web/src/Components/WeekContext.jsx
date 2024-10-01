@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect } from 'react';
-
+    //skapar ett context objekt som delar veckorelaterad data mellan komponenterna
     const WeekContext = createContext();
  
     const WeekProvider = ({ children }) => {
@@ -17,6 +17,7 @@ import { createContext, useState, useEffect } from 'react';
         setWeekNumber((prevState) => (prevState - 1 < 1 ? 52 : prevState - 1)); 
     };
         
+//hämtar den aktuella månaden och veckan som en sträng och sätter den in i state variablen month
     const getCurrentMonth = () => {
         const date = new Date();
         let month = date.toLocaleString("default", { month: "long" });
@@ -52,7 +53,7 @@ import { createContext, useState, useEffect } from 'react';
         setWeekDays(daysOfWeek);
     };
         
-
+    //körs en gång vid start av applikationen
     useEffect(() => {
         getCurrentMonth();
         const currentWeek = getCurrentWeek(new Date);
@@ -61,7 +62,7 @@ import { createContext, useState, useEffect } from 'react';
         getDatesOfCurrentWeek(currentWeek, currentYear);
         setYear(currentYear);
     }, []);
-
+    //körs när veckonumret ändras
     useEffect(() => {
         getDatesOfCurrentWeek(weekNumber, year);
     }, [weekNumber]);
