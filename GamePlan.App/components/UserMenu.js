@@ -1,4 +1,12 @@
-import { Text, Image, View, FlatList, SectionList, StyleSheet, Pressable } from "react-native";
+import {
+  Text,
+  Image,
+  View,
+  FlatList,
+  SectionList,
+  StyleSheet,
+  Pressable,
+} from "react-native";
 import { useState } from "react";
 import fishSteer from "../assets/images/fishSteer.gif";
 import levelIcon from "../assets/images/levelIcon.png";
@@ -18,20 +26,19 @@ const UserMenu = (props) => {
         <View style={styles.userDropdown}>
           <View style={styles.userInfo}>
             <Pressable onPress={toggleDropdown}>
-
-            <Image
-              source={fishSteer}
-              alt="user icon"
-              style={styles.userImg}
-              
+              <Image
+                source={fishSteer}
+                alt="user icon"
+                style={styles.userImg}
               />
-              </Pressable>
+            </Pressable>
             <Text>{props.userName}</Text>
             <View style={styles.userDetails}>
               <View style={styles.userLevel}>
-                <Image style={styles.levelIcon} 
-                source={levelIcon} 
-                alt="level" 
+                <Image
+                  style={styles.levelIcon}
+                  source={levelIcon}
+                  alt="level"
                 />
                 <Text style={styles.userH3}>{props.level}</Text>
               </View>
@@ -47,9 +54,10 @@ const UserMenu = (props) => {
           </View>
           <View style={styles.dropdownList}>
             {menuOptions.map((item) => (
-              <View 
-              // style={dropdownItem} 
-              key={item}>
+              <View
+                // style={dropdownItem}
+                key={item}
+              >
                 <Text>{item}</Text>
               </View>
             ))}
@@ -57,12 +65,8 @@ const UserMenu = (props) => {
         </View>
       ) : (
         <Pressable onPress={toggleDropdown}>
-            <Image
-              source={fishSteer}
-              alt="user icon"
-              style={styles.userImg}
-              />
-              </Pressable>
+          <Image source={fishSteer} alt="user icon" style={styles.userImg} />
+        </Pressable>
       )}
     </View>
   );
@@ -71,39 +75,27 @@ export default UserMenu;
 
 const styles = StyleSheet.create({
   userContainer: {
-    flex:1,
-    justifyContent: 'center',
-    alignContent: 'center',
+    flex: 1,
+    justifyContent: "center",
+    alignContent: "center",
   },
   userImg: {
-    position: 'relative',
+    position: "relative",
     width: 60,
     height: 60,
     borderWidth: 2,
-    borderColor: 'black',
+    borderColor: "black",
     borderRadius: 30,
   },
   userInfo: {
-    textAlign: 'center',
+    textAlign: "center",
   },
   userDetails: {
     flex: 1,
   },
-  userDropdown: {
-  },
-  hr: {
-    
-  },
-  userH3: {
-
-  },
-  dropdownList: {
-
-  },
-  dropdownItem: {
-
-  },
-
-
-  
+  userDropdown: {},
+  hr: {},
+  userH3: {},
+  dropdownList: {},
+  dropdownItem: {},
 });
