@@ -5,6 +5,7 @@ import ArrowUp from "../assets/images/arrowUp.png";
 const Day = (props) => {
   const [expandDay, setExpandDay] = useState(false);
   const [activities, setActivities] = useState([]);
+  const [activityCount, setActivityCount] = useState(0);
 
   const TodaysDate = () => {
     const date = new Date();
@@ -17,33 +18,36 @@ const Day = (props) => {
 
   //useeffect to fetch activities and display them when the
   //day is expanded and wanting to add activity to that day, show as a list or something.
-  useEffect(() => {
-    if (expandDay && props.user) {
-      const fetchActivities = async () => {
-        const response = await fetch(
-          `https://localhost:7136/api/users/${props.user.user}/activities`
-        );
+  const fetchActivities = async () => {
+    const response = await fetch(
+      `https://localhost:7136/api/users/${props.user.user}/activities`
+    );
 
-        const data = await response.json();
-        const todayActivities = data.filter(
-          (activity) =>
-            new Date(activity.date).toDateString() === props.day.toDateString()
-        );
-        setActivities(todayActivities);
-      };
+    const data = await response.json();
+    const todayActivities = data.filter(
+      (activity) =>
+        new Date(activity.date).toDateString() === props.day.toDateString()
+    );
+    setActivities(todayActivities);
+    setActivityCount(todayActivities.length);
+  };
+
+  useEffect(() => {
+    fetchActivities();
+  }, [props.user, props.day]);
+  
+  useEffect(() => {
+    if (expandDay) {
       fetchActivities();
     }
-    return () => {
-      // console.log("cleanup");
-    };
-  }, [expandDay, props.user, props.day]);
+  }, [expandDay]);
 
   const toggleActivity = async (activity) => {
     const activityState = !activity.completed;
     const activityXp = activityState ? activity.xp : -activity.xp;
 
     const updatedActivity = { ...activity, completed: activityState };
-    const activityResponse = await fetch(
+      await fetch(
       `https://localhost:7136/api/activities/${activity.id}`,
       {
         method: "PUT",
@@ -54,7 +58,7 @@ const Day = (props) => {
       }
     );
 
-    const userResponse = await fetch(
+    await fetch(
       `https://localhost:7136/api/users/${props.user.user}`,
       {
         method: "PUT",
