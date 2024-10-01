@@ -42,7 +42,7 @@ const Navbar = (props) => {
         {/* <BurgerMenu /> */}
       </div>
       <div className="navbarCenter">
-        <h2 className="viewMonth">{viewMonth()}</h2>
+        <h2 className="viewMonth">{month}</h2>
         <div className="navbarWeeks">
           <button className ="btn-weekNumber" onClick={decreaseWeekNumber}>Föreg.</button>
           <span className="weekNumber"> Vecka {weekNumber}</span>

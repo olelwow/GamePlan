@@ -16,14 +16,30 @@ import { createContext, useState, useEffect } from 'react';
     const decreaseWeekNumber = () => {
         setWeekNumber((prevState) => (prevState - 1 < 1 ? 52 : prevState - 1)); 
     };
-        
+ 
+    const changeMonth = (weekDays) => {
+        const displayedDays = weekDays.map((m) => getCurrentMonth(m));
+    
+        const isSameMonth = (shit) => {
+          const halfLength = Math.floor(shit.length / 2);
+          return shit.every((value) => value === shit[halfLength]);
+        };
+    
+        const middleDay = displayedDays[Math.floor(displayedDays.length / 2)];
+    
+        if (isSameMonth(displayedDays)) {
+          return middleDay;
+        } else {
+          return displayedDays[4];
+        }
+      };
 //hämtar den aktuella månaden och veckan som en sträng och sätter den in i state variablen month
-    const getCurrentMonth = () => {
-        const date = new Date();
-        let month = date.toLocaleString("default", { month: "long" });
-        month = month.charAt(0).toUpperCase() + month.slice(1);
-        setMonth(month);
-        };  
+const getCurrentMonth = (date) => {
+    let month = date.toLocaleString("default", { month: "long" });
+    month = month.charAt(0).toUpperCase() + month.slice(1);
+
+    return month;
+  };
         
         const getCurrentWeek = (d) => {
             d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
@@ -55,7 +71,7 @@ import { createContext, useState, useEffect } from 'react';
         
     //körs en gång vid start av applikationen
     useEffect(() => {
-        getCurrentMonth();
+        setMonth(getCurrentMonth(new Date()));
         const currentWeek = getCurrentWeek(new Date);
         const currentYear = new Date().getFullYear();
         setWeekNumber(currentWeek);
@@ -66,6 +82,10 @@ import { createContext, useState, useEffect } from 'react';
     useEffect(() => {
         getDatesOfCurrentWeek(weekNumber, year);
     }, [weekNumber]);
+        
+    useEffect(() => {
+        setMonth(changeMonth(weekDays));
+      }, [weekDays]);
 
         return (
             <WeekContext.Provider
