@@ -12,6 +12,7 @@ const Day = (props) => {
     const todaysDate = props.day.toLocaleDateString("sv-SE", {
       weekday: "long",
       day: "numeric",
+      month: "numeric",
     });
     return todaysDate;
   };
@@ -69,7 +70,7 @@ const Day = (props) => {
           <Image
             source={onPress ? ArrowUp : ArrowDown}
             alt="arrow"
-            styles ={style.arrow}
+            styles={style.arrow}
           />
         </View>
       </Button>
@@ -104,7 +105,5 @@ const Day = (props) => {
 export default Day;
 
 const style = StyleSheet.create({
-  day: {
-
-  },
+  day: {},
 });
