@@ -7,6 +7,7 @@ import {
   StyleSheet,
   ImageBackground,
   Button,
+  SafeAreaView,
 } from "react-native";
 import { useState, useEffect, useContext } from "react";
 import { WeekContext } from "../context/WeekContext";
@@ -21,6 +22,7 @@ const Navbar = () => {
   const getUser = async () => {
     const res = await fetch("https://localhost:7136/api/users/2");
     const data = await res.json();
+    console.log("user data: ", data);
 
     setUser(data);
   };
@@ -31,13 +33,16 @@ const Navbar = () => {
   }, []);
 
   return (
-    <View style={styles.navbar}>
-      <ImageBackground
-        source={require("../assets/images/Background_main.png")}
-        style={styles.navbarBackground}
-      >
-        <View style={styles.navbarLeft}></View>
-        <View style={styles.navbarCenter}>
+    <SafeAreaView style={styles.safeAreaView}>
+        <View style={styles.navbar}>
+            <ImageBackground
+                source={require("../assets/images/Background_main.png")}
+                style={styles.navbarBackground}
+            >
+            <View style={styles.navbarLeft}>
+         
+            </View>
+            <View style={styles.navbarCenter}>
           <Text style={styles.viewMonth}>{month}</Text>
           <View style={styles.weekNumberView}>
             <Button
@@ -57,12 +62,12 @@ const Navbar = () => {
               Weekly goal: {user.xp}/{goalXp}
             </Text>
           </View>
+            <View style={styles.navbarRight}>
+                <UserMenu {...user} />
+             </View>
+            </ImageBackground>
         </View>
-        <View style={styles.navbarRight}>
-          <UserMenu {...user} />
-        </View>
-      </ImageBackground>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -82,13 +87,16 @@ const xpBar = (percentage) => ({
 export default Navbar;
 
 const styles = StyleSheet.create({
+    safeAreaView:{
+        flex:1,
+        position: "absolute",
+        top: 0,
+        left: 0,
+        right: 0,
+        height: "18%",
+    },
   navbar: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    height: "15%",
-    backgroundColor: "grey",
+    flex:1,
   },
   navbarBackground: {
     flex: 1,

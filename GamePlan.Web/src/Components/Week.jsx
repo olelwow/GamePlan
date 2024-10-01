@@ -1,13 +1,10 @@
 import Day from "./Day";
+import { useContext } from "react";
+import { WeekContext } from "./WeekContext";
 
 
 const Week = () => {
-    const weekDays = [];
-    for (let i = 0; i < 7; i++) {
-      const date = new Date();
-      date.setDate(date.getDate() - date.getDay() + i + 1);
-      weekDays.push(date);
-    }
+    const { weekDays } = useContext(WeekContext);
 
   return (
     <>
@@ -15,7 +12,7 @@ const Week = () => {
       {weekDays.map((day, index) => (
         <Day key={index} day={day} />
       ))}
-    </div>
+      </div>
     </>
   );
 };
