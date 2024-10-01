@@ -1,62 +1,88 @@
-import React, { createContext, useState, useEffect } from 'react';
+import { createContext, useState, useEffect } from 'react';
 
-export const WeekContext = createContext();
-    
-    export const WeekProvider = ({ children }) => {
-    const [weekNumber, setWeekNumber] = useState(null);
+    const WeekContext = createContext();
+ 
+    const WeekProvider = ({ children }) => {
     const [currentDate, setCurrentDate] = useState(new Date());
     const [weekDays, setWeekDays] = useState([]);
+    const [weekNumber, setWeekNumber] = useState(0);
+    const [month, setMonth] = useState("");
+    const [year, setYear] = useState(0);
+    
+    const increaseWeekNumber = () => {
+        setWeekNumber((prevState) => (prevState + 1 > 52 ? 1 : prevState + 1));
+    };
+
+    const decreaseWeekNumber = () => {
+        setWeekNumber((prevState) => (prevState - 1 < 1 ? 52 : prevState - 1)); 
+    };
+        
+    const getCurrentMonth = () => {
+        const date = new Date();
+        let month = date.toLocaleString("default", { month: "long" });
+        month = month.charAt(0).toUpperCase() + month.slice(1);
+        setMonth(month);
+        };  
+        
+        const getCurrentWeek = (d) => {
+            d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+            d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
+            var yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+            var weekNumber = Math.ceil(((d - yearStart) / 86400000 + 1) / 7);
+            const result = [d.getUTCFullYear(), weekNumber];
+
+            return result[1];
+        };
+
+    const getDatesOfCurrentWeek = (weekNumber, year) => {
+        const firstDayOfYear = new Date(year, 0, 1);
+        const dayOfWeek = firstDayOfYear.getDay();
+        const firstDayOfWeek = new Date(firstDayOfYear.getTime());
+
+        const daysOffSet =
+            (weekNumber - 1) * 7 - (dayOfWeek === 0 ? 6 : dayOfWeek - 1);
+        firstDayOfWeek.setDate(firstDayOfYear.getDate() + daysOffSet);
+        
+        const daysOfWeek = [];
+        for (let i = 0; i < 7; i++) {
+            const date = new Date(firstDayOfWeek.getTime());
+            date.setDate(firstDayOfWeek.getDate() + i);
+            daysOfWeek.push(date);
+        }
+        setWeekDays(daysOfWeek);
+    };
+        
 
     useEffect(() => {
-        const date = new Date();
-        const [year, week] = getWeekNumber(date);
-        setWeekNumber(week);
-        updateWeekDays();
+        getCurrentMonth();
+        const currentWeek = getCurrentWeek(new Date);
+        const currentYear = new Date().getFullYear();
+        setWeekNumber(currentWeek);
+        getDatesOfCurrentWeek(currentWeek, currentYear);
+        setYear(currentYear);
     }, []);
 
-    const getWeekNumber = (d) => {
-        d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-        d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
-        var yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
-        var weekNo = Math.ceil(((d - yearStart) / 86400000 + 1) / 7);
-        return [d.getFullYear(), weekNo];
-    }
-    
-    const updateWeekDays = () => {
-        const days = [];
-        for (let i = 0; i < 7; i++) {
-            const newDate = new Date();
-            newDate.setDate(newDate.getDate() - newDate.getDay() + i + 1);
-            days.push(newDate);
-        }
-        setWeekDays(days);
+    useEffect(() => {
+        getDatesOfCurrentWeek(weekNumber, year);
+    }, [weekNumber]);
+
+        return (
+            <WeekContext.Provider
+                value={{
+                currentDate,
+                setCurrentDate,
+                weekNumber,
+                setWeekNumber,
+                month,
+                weekDays,
+                setWeekDays,
+                setMonth,
+                increaseWeekNumber,
+                decreaseWeekNumber,
+            }}>
+                {children}
+            </WeekContext.Provider>
+        );
     };
 
-    const handleNextWeek = () => {
-        setCurrentDate(prevDate => {
-            const newDate = new Date(prevDate);
-            newDate.setDate(newDate.getDate() + 7);
-            const [year, week] = getWeekNumber(newDate);
-            setWeekNumber(week);
-            updateWeekDays(newDate);
-            return newDate;
-        });
-    };
-
-    const handlePrevWeek = () => {
-        setCurrentDate(prevDate => {
-            const newDate = new Date(prevDate);
-            newDate.setDate(newDate.getDate() - 7);
-            const [year, week] = getWeekNumber(newDate);
-            setWeekNumber(week);
-            updateWeekDays(newDate);
-            return newDate;
-        });
-    };
-
-    return (
-        <WeekContext.Provider value={{ weekNumber, weekDays, handleNextWeek, handlePrevWeek }}>
-            {children}
-        </WeekContext.Provider>
-    );
-};
+export { WeekProvider, WeekContext };

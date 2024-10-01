@@ -1,5 +1,5 @@
 import Day from "./Day";
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { WeekContext } from "./WeekContext";
 
 
