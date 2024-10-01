@@ -5,6 +5,7 @@ import ArrowUp from "../assets/images/arrowUp.png";
 const Day = (props) => {
   const [expandDay, setExpandDay] = useState(false);
   const [activities, setActivities] = useState([]);
+  const [activityCount, setActivityCount] = useState(0);
 
   const TodaysDate = () => {
     const date = new Date();
@@ -17,22 +18,61 @@ const Day = (props) => {
 
   //useeffect to fetch activities and display them when the
   //day is expanded and wanting to add activity to that day, show as a list or something.
+  const fetchActivities = async () => {
+    const response = await fetch(
+      `https://localhost:7136/api/users/${props.user.user}/activities`
+    );
+
+    const data = await response.json();
+    const todayActivities = data.filter(
+      (activity) =>
+        new Date(activity.date).toDateString() === props.day.toDateString()
+    );
+    setActivities(todayActivities);
+    setActivityCount(todayActivities.length);
+  };
+
   useEffect(() => {
-    let expandedDay = true;
+    fetchActivities();
+  }, [props.user, props.day]);
+  
+  useEffect(() => {
     if (expandDay) {
-      const fetchActivities = async () => {
-        const response = await fetch("https://localhost:7136/api/activities");
-        const data = await response.json();
-        if (expandedDay) {
-          setActivities(data);
-        }
-      };
       fetchActivities();
     }
-    return () => {
-      expandedDay = false;
-    };
   }, [expandDay]);
+
+  const toggleActivity = async (activity) => {
+    const activityState = !activity.completed;
+    const activityXp = activityState ? activity.xp : -activity.xp;
+
+    const updatedActivity = { ...activity, completed: activityState };
+      await fetch(
+      `https://localhost:7136/api/activities/${activity.id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedActivity),
+      }
+    );
+
+    await fetch(
+      `https://localhost:7136/api/users/${props.user.user}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ xp: activityXp }),
+      }
+    );
+
+    setActivities(
+      activities.map((a) => (a.id === activity.id ? updatedActivity : a))
+    );
+  };
 
   const dayWednesday = props.day.getDay() === 3;
   const daySaturday = props.day.getDay() === 6;
@@ -45,7 +85,7 @@ const Day = (props) => {
     console.log(`Ta bort aktivitet ${TodaysDate()}`);
   }
 
-const [onClick, setOnClick] = useState(false);
+  const [onClick, setOnClick] = useState(false);
 const [borderRadius, setBorderRadius] = useState('5px');
 
 function handleClick() {
@@ -55,51 +95,52 @@ function handleClick() {
 
   return (
     <>
-      <button 
-      style={
-         {borderRadius: borderRadius} 
-        }
-      className="day" 
-      onClick={
-        function () 
-        {
-          setExpandDay(!expandDay),
-          handleClick()
-        }}>
+      <button
+        style={{ borderRadius: borderRadius }}
+        className="day"
+        onClick={() => {
+          setExpandDay(!expandDay), handleClick();
+        }}
+      >
         {TodaysDate()}
-        <p>3st</p>
-        <img 
-          src={onClick ?  ArrowUp : ArrowDown} 
-          alt="arrow" 
-          className="arrow" 
+        <p>{activities.length} aktiviteter</p>
+        <img
+          src={onClick ? ArrowUp : ArrowDown}
+          alt="arrow"
+          className="arrow"
         />
       </button>
-      
+
       {expandDay && (
-        <div 
-        id="dayContent"
-        
-        >
-          <p className="activitySummary">Aktivitet för {TodaysDate()}</p>
-          {dayWednesday &&
-            activities.find((activity) => activity.name === "Study") && (
-              <p>Idag är det Study</p>
+        <div id="dayContent">
+          {activities.length > 0 ? (
+            activities.map((activity) => (
+              <div key={activity.id}>
+                <input
+                  type="checkbox"
+                  checked={activity.completed}
+                  onChange={() => toggleActivity(activity)}
+                />
+                <span>
+                  {activity.name} - XP: {activity.xp}
+                </span>
+              </div>
+            ))
+          ) : (
+            <p>Inga aktiviteter idag.</p>
+          )}
+
+          <div className="buttonContainer">
+            <button className="addButton" onClick={AddActivity}>
+              {" "}
+              +
+            </button>
+            {activities && (
+              <button className="removeButton" onClick={RemoveActivity}>
+                {" "}
+                -
+              </button>
             )}
-          {daySaturday &&
-            activities.find((activity) => activity.name === "Gym") && (
-              <p>Idag är det Gym</p>
-            )}
-            <div className="buttonContainer">
-              <button
-                className="addButton" 
-              onClick=
-              {AddActivity}> + 
-                </button>
-              {activities && <button
-                className="removeButton" 
-              onClick=
-              {RemoveActivity}> - 
-              </button>}
           </div>
         </div>
       )}

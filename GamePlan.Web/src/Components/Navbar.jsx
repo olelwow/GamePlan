@@ -6,7 +6,7 @@ import Week from "./Week";
 import { WeekProvider, WeekContext } from "./WeekContext";
 
 
-const Navbar = () => {
+const Navbar = (props) => {
   const [goalXp, setGoalXp] = useState(200);
   const [user, setUser] = useState({});
   const {
@@ -25,7 +25,7 @@ const Navbar = () => {
 
   // Get user object from api
   const getUser = async () => {
-    const res = await fetch("https://localhost:7136/api/users/3");
+    const res = await fetch(`https://localhost:7136/api/users/${props.user}`);
     const data = await res.json();
 
     setUser(data);
