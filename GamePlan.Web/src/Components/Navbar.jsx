@@ -44,9 +44,9 @@ const Navbar = (props) => {
       <div className="navbarCenter">
         <h2 className="viewMonth">{month}</h2>
         <div className="navbarWeeks">
-          <button className ="btn-weekNumber" onClick={decreaseWeekNumber}>Föreg.</button>
+          <button className="btn-weekNumber" onClick={decreaseWeekNumber}>Föreg.</button>
           <span className="weekNumber"> Vecka {weekNumber}</span>
-          <button className ="btn-weekNumber" onClick={increaseWeekNumber}>Nästa</button>
+          <button className="btn-weekNumber" onClick={increaseWeekNumber}>Nästa</button>
         </div>
         <div className="goal" style={xpBar(user.xp / 2)}>
           <p>
