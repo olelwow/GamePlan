@@ -34,39 +34,38 @@ const Navbar = () => {
 
   return (
     <SafeAreaView style={styles.safeAreaView}>
-        <View style={styles.navbar}>
-            <ImageBackground
-                source={require("../assets/images/Background_main.png")}
-                style={styles.navbarBackground}
-            >
-            <View style={styles.navbarLeft}>
-         
+      <View style={styles.navbar}>
+        <ImageBackground
+          source={require("../assets/images/Background_main.png")}
+          style={styles.navbarBackground}
+        >
+          <View style={styles.navbarLeft}></View>
+          <View style={styles.navbarCenter}>
+            <Text style={styles.viewMonth}>{month}</Text>
+            <View style={styles.weekNumberView}>
+              <Button
+                style={styles.weekNumberButton}
+                title="-"
+                onPress={decreaseWeekNumber}
+              ></Button>
+              <Text style={styles.weekNumberText}>Vecka {weekNumber}</Text>
+              <Button
+                style={styles.weekNumberButton}
+                title="+"
+                onPress={increaseWeekNumber}
+              ></Button>
             </View>
-            <View style={styles.navbarCenter}>
-          <Text style={styles.viewMonth}>{month}</Text>
-          <View style={styles.weekNumberView}>
-            <Button
-              style={styles.weekNumberButton}
-              title="-"
-              onPress={decreaseWeekNumber}
-            ></Button>
-            <Text style={styles.weekNumberText}>Vecka {weekNumber}</Text>
-            <Button
-              style={styles.weekNumberButton}
-              title="+"
-              onPress={increaseWeekNumber}
-            ></Button>
+            <View className="goal" style={xpBar(user.xp / 2)}>
+              <Text>
+                Weekly goal: {user.xp}/{goalXp}
+              </Text>
+            </View>
           </View>
-          <View className="goal" style={xpBar(user.xp / 2)}>
-            <Text>
-              Weekly goal: {user.xp}/{goalXp}
-            </Text>
+          <View style={styles.navbarRight}>
+            <UserMenu {...user} />
           </View>
-            <View style={styles.navbarRight}>
-                <UserMenu {...user} />
-             </View>
-            </ImageBackground>
-        </View>
+        </ImageBackground>
+      </View>
     </SafeAreaView>
   );
 };
@@ -80,23 +79,23 @@ const xpBar = (percentage) => ({
   backgroundColor: "rgb(255, 255, 255)",
   alignItems: "center",
   backgroundImage: `linear-gradient(to right, rgb(43, 255, 0) ${percentage}%, rgba(0, 0, 0, 0) ${percentage}%)`,
-  width: "100%",
+  width: "50%",
   borderRadius: 5,
 });
 
 export default Navbar;
 
 const styles = StyleSheet.create({
-    safeAreaView:{
-        flex:1,
-        position: "absolute",
-        top: 0,
-        left: 0,
-        right: 0,
-        height: "18%",
-    },
+  safeAreaView: {
+    flex: 1,
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    height: "18%",
+  },
   navbar: {
-    flex:1,
+    flex: 1,
   },
   navbarBackground: {
     flex: 1,

@@ -66,20 +66,24 @@ const Day = (props) => {
           <Image
             source={expandDay ? ArrowUp : ArrowDown}
             alt="arrow"
-            styles={style.arrow}
+            styles={styles.arrow}
           />
         </View>
       </Pressable>
 
       {expandDay && (
         <View style={styles.dayContent}>
-          <Text style={styles.activitySummary}>Aktivitet för {TodaysDate()}</Text>
-          {dayWednesday && activities.find((activity) => activity.name === "Study") && (
-            <Text>Idag är det Study</Text>
-          )}
-          {daySaturday && activities.find((activity) => activity.name === "Gym") && (
-            <Text>Idag är det Gym</Text>
-          )}
+          <Text style={styles.activitySummary}>
+            Aktivitet för {TodaysDate()}
+          </Text>
+          {dayWednesday &&
+            activities.find((activity) => activity.name === "Study") && (
+              <Text>Idag är det Study</Text>
+            )}
+          {daySaturday &&
+            activities.find((activity) => activity.name === "Gym") && (
+              <Text>Idag är det Gym</Text>
+            )}
           <View style={styles.buttonContainer}>
             <Pressable style={styles.addButton} onPress={AddActivity}>
               <Text> + </Text>
