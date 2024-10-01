@@ -200,6 +200,11 @@
       padding-left: 0.5rem;
     }
 
+    .activity {
+      @include flexColumn;
+      padding-left: 0.5rem;
+    }
+
     .buttonContainer{
       @include flexRow;
       align-self: flex-end;

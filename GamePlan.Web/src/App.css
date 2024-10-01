@@ -169,6 +169,11 @@
 .mainPage #dayContent .activitySummary {
   padding-left: 0.5rem;
 }
+.mainPage #dayContent .activity {
+  display: flex;
+  flex-direction: column;
+  padding-left: 0.5rem;
+}
 .mainPage #dayContent .buttonContainer {
   display: flex;
   flex-direction: row;
