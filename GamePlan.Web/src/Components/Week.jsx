@@ -1,7 +1,6 @@
 import Day from "./Day";
 
-
-const Week = () => {
+const Week = (user) => {
     const weekDays = [];
     for (let i = 0; i < 7; i++) {
       const date = new Date();
@@ -13,7 +12,7 @@ const Week = () => {
     <>
     <div className="weekday">
       {weekDays.map((day, index) => (
-        <Day key={index} day={day} />
+        <Day key={index} day={day} user={user}/>
       ))}
     </div>
     </>

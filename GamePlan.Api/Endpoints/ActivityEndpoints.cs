@@ -142,7 +142,8 @@ namespace GamePlan.Api.Endpoints
             activity.Name = activityDto.Name;
             activity.Xp = activityDto.Xp;
             activity.Date = activityDto.Date;
-            
+            activity.Completed = activityDto.Completed;
+
             context.Activities.Update(activity);
             await context.SaveChangesAsync();
             return Results.Ok(activity);
