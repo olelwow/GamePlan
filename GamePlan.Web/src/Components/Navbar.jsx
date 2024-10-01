@@ -3,7 +3,7 @@ import UserMenu from "./NavbarComponents/UserMenu";
 import BurgerMenu from "./NavbarComponents/BurgerMenu";
 import NavbarBackground from "../assets/images/Background_main.png";
 
-const Navbar = () => {
+const Navbar = (props) => {
   const [goalXp, setGoalXp] = useState(200);
   const [user, setUser] = useState({});
 
@@ -15,7 +15,7 @@ const Navbar = () => {
 
   // Get user object from api
   const getUser = async () => {
-    const res = await fetch("https://localhost:7136/api/users/3");
+    const res = await fetch(`https://localhost:7136/api/users/${props.user}`);
     const data = await res.json();
 
     setUser(data);
