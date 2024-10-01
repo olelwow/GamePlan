@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import UserMenu from "./NavbarComponents/UserMenu";
-import BurgerMenu from "./NavbarComponents/BurgerMenu";
+// import BurgerMenu from "./NavbarComponents/BurgerMenu";
 import NavbarBackground from "../assets/images/Background_main.png";
 import Week from "./Week";
 import { WeekProvider, WeekContext } from "./WeekContext";
@@ -39,15 +39,15 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <div className="navbarLeft">
-        <BurgerMenu />
+        {/* <BurgerMenu /> */}
       </div>
       <div className="navbarCenter">
         <h2 className="viewMonth">{viewMonth()}</h2>
-        <WeekProvider>
-          <button className ="btn-weekNumber" onClick={decreaseWeekNumber}>Föregående</button>
-          <span className="weekDay">Vecka {weekNumber}</span>
+        <div className="navbarWeeks">
+          <button className ="btn-weekNumber" onClick={decreaseWeekNumber}>Föreg.</button>
+          <span className="weekNumber"> Vecka {weekNumber}</span>
           <button className ="btn-weekNumber" onClick={increaseWeekNumber}>Nästa</button>
-        </WeekProvider>
+        </div>
         <div className="goal" style={xpBar(user.xp / 2)}>
           <p>
             Weekly goal: {user.xp}/{goalXp}

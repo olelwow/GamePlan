@@ -20,6 +20,7 @@
 }
 .mainPage .navbar .navbarCenter .viewMonth {
   text-align: center;
+  font-size: 1.8rem;
 }
 .mainPage .navbar .navbarCenter .goal {
   display: flex;
@@ -33,24 +34,30 @@
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
 }
-.mainPage .navbar .navbarCenter .weekDay {
+.mainPage .navbar .navbarCenter .navbarWeeks {
+  display: flex;
+  justify-content: space-between;
+  flex: 1;
+}
+.mainPage .navbar .navbarCenter .navbarWeeks .weekNumber {
   font-size: 1.4rem;
   font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
 }
-.mainPage .navbar .navbarCenter .btn-weekNumber {
-  padding: 10px 20px;
-  flex-wrap: nowrap;
-  border: none;
-  border-radius: 5px;
+.mainPage .navbar .navbarCenter .navbarWeeks .btn-weekNumber {
+  padding: 3px 2px;
+  border: rgba(0, 0, 0, 0.7) 1px solid;
+  border-radius: 10px;
+  background-color: #08c0fd;
   cursor: pointer;
   font-size: 1rem;
-  margin: 0.5rem;
-  display: inline-block;
-  background-color: #007bff;
-  margin-left: 10%;
+  flex: 1;
 }
-.mainPage .navbar .navbarCenter .btn-weekNumber:hover {
-  background-color: #0056b3;
+.mainPage .navbar .navbarCenter .navbarWeeks .btn-weekNumber:hover {
+  background-color: #106cd0;
 }
 .mainPage .navbar .navbarRight {
   display: flex;
