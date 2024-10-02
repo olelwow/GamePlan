@@ -1,36 +1,79 @@
 import { useState, useEffect } from "react";
 
 const UserNotes = (props) => {
-  const [note, setNote] = useState([]);
+  const [notes, setNotes] = useState([]);
   const [userNoteInputValue, setNoteInputValue] = useState("");
-  const userId = props.userId;
+ 
 
   const fetchNotes = async () => {
     try {
-        const respons = await fetch(`/api/users/${userId}/notes`);
+        const response = await fetch(`https://localhost:7136/api/users/1/notes`);
         if (!response.ok) {
             throw new Error("Failed to fetch notes");
         }
-        const data = await respons.json();
-        setNote(data.notes);
+        const data = await response.json();
+        setNotes(data || []);
     } catch (error) {
         console.error("Error fetching notes:", error);
     }
   };
 
   useEffect(() => {
-    fetchNotes();
-  },[userId]);
+    if (props.user) {
+      fetchNotes();
+    } else {
+      console.error("userId is undefined");
+    }
+  }, [props.user]);
 
-  const addNote = () => {
-    setNote([ ...note, {text: userNoteInputValue} ]);
-    setNoteInputValue("");
+  const addNote = async () => {
+    // if (!userNoteInputValue) return;
+    // const newNote = { noteText: userNoteInputValue };
+
+    try {
+        const response = await fetch(`https://localhost:7136/api/users/${props.user}/notes`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({noteText: userNoteInputValue}),
+        });
+
+        if (!response.ok) {
+            throw new Error("Failed to add note");
+        }
+
+        const savedNote = await response.json();
+        setNotes([...notes, savedNote ]);
+        setNoteInputValue("");
+    } catch (error) {
+        console.error("Error adding note:", error);
+      }
   };
 
-  const deleteNote = (index) => {
-    const newNoteList = note.filter((_, noteIndex) => noteIndex !== index);
-    setNote(newNoteList);
-  };
+  const deleteNote = async (noteId) => {
+    try {
+        const response = await fetch(`https://localhost:7136/api/users/${props.user}/notes/${noteId}`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            userId: props.user,
+            noteId: noteId,
+        }),
+      });
+  
+        if (!response.ok) {
+          throw new Error("Failed to delete note");
+        }
+  
+        setNotes(notes.filter((note) => note.id !== noteId));
+      } catch (error) {
+        console.error("Error deleting note:", error);
+      }
+     
+    };
 
   return (
     <div className="NoteBoard">
@@ -46,10 +89,10 @@ const UserNotes = (props) => {
       </div>
       <div>
         <ul>
-          {note.map((note, index) => (
-            <li key={index}>
-              <span>{note}
-              <button onClick={() =>deleteNote(index)}>Delete</button>
+          {notes.map((note) => (
+            <li key={note.id}>
+              <span>{note.noteText}
+              <button onClick={() =>deleteNote(note.id)}>Delete</button>
               </span>
             </li>
           ))}

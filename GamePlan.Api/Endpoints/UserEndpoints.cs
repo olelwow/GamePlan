@@ -39,7 +39,13 @@ namespace GamePlan.Api.Endpoints
                 .WithTags(_tagUser)
                 .WithSummary("Endpoint to update the xp value for the user with the specified id");
 
-            app.MapPut("/api/users/{id}/notes", UpdateUserNote)
+            app.MapGet("api/users/{id}/notes", GetUserNotes)
+                .WithOpenApi()
+                .WithDescription("Get all users")
+                .WithTags(_tagUser)
+                .WithSummary("Endpoint to get all users");
+
+            app.MapPost("/api/users/{id}/notes", UpdateUserNote)
                 .WithOpenApi()
                 .WithDescription("Update user-note for user by id")
                 .WithTags(_tagUser)
@@ -56,6 +62,17 @@ namespace GamePlan.Api.Endpoints
                 .WithDescription("Delete user by id")
                 .WithTags(_tagUser)
                 .WithSummary("Endpoint to delete the specified user from the database.");
+        }
+
+        private static async Task<IResult> GetUserNotes(GamePlanContext context, int id)
+        {
+            var currentUser = await context.Users.Include(user => user.Notes).FirstOrDefaultAsync(user => user.Id == id);
+            if (currentUser == null)
+            {
+                return Results.NotFound($"User with id {id} not found");
+            }
+
+            return Results.Ok(currentUser.Notes);
         }
 
         private static async Task<IResult> DeleteNoteById(GamePlanContext context, [FromBody] DeleteUserNoteDto deleteUserDto, IValidator<DeleteUserNoteDto> validator)
