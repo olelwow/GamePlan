@@ -7,7 +7,6 @@ import { WeekProvider, WeekContext } from "./WeekContext";
 
 const Navbar = (props) => {
   const [goalXp, setGoalXp] = useState(200);
-  // const [toggle, setToggle] = useState(false);
   const [user, setUser] = useState({});
   const {
     weekNumber,
@@ -39,7 +38,6 @@ const Navbar = (props) => {
 
   useEffect(() => {
     getUser();
-    console.log("using effect");
   }, []);
 
   return (

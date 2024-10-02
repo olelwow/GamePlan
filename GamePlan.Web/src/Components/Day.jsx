@@ -36,24 +36,6 @@ const Day = (props) => {
     });
     return todaysDate;
   };
-  //useeffect to fetch activities and display them when the
-  //day is expanded and wanting to add activity to that day, show as a list or something.
-  const fetchActivities = async () => {
-    const response = await fetch(
-      `https://localhost:7136/api/users/${props.user}/activities`
-    );
-
-    const data = await response.json();
-    const todayActivities = data.filter(
-      (activity) =>
-        new Date(activity.date).toDateString() === props.day.toDateString()
-    );
-    setActivities(todayActivities);
-  };
-
-  useEffect(() => {
-    fetchActivities();
-  }, [props.user, props.day]);
 
   useEffect(() => {
     if (expandDay) {
@@ -61,57 +43,13 @@ const Day = (props) => {
     }
   }, [expandDay]);
 
-  // function that toggles the activity to completed or not
-  // abd updates the xp of the user and the activity status in the database
-
-  // const toggleActivity = async (activity) => {
-  //   setIsChecked((prevState) => !prevState);
-  //   activity.completed = isChecked;
-  //   const activityXp = activity.completed && activity.xp;
-
-  //   const updatedActivity = {
-  //     ...activity,
-  //     completed: activity.completed,
-  //     date: activity.date,
-  //   };
-  //   await fetch(`https://localhost:7136/api/activities/${activity.id}`, {
-  //     method: "PUT",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify(updatedActivity),
-  //   });
-
-  //   if (activityXp > 0) {
-  //     const res = await fetch(
-  //       `https://localhost:7136/api/users/${props.user}`,
-  //       {
-  //         method: "PUT",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify({ xp: activityXp }),
-  //       }
-  //     );
-  //     if (res.ok) {
-  //       console.log("xp updated");
-  //     } else {
-  //       console.log("error updating xp");
-  //     }
-  //   }
-  //   setActivities(
-  //     activities.map((a) => (a.id === activity.id ? updatedActivity : a))
-  //   );
-  // };
-
   // useeffect for fetching things on load
   useEffect(() => {
     const fetchData = async () => {
-      getDaysActivities();
       await getUser();
     };
     fetchData();
-  }, [props.day]);
+  }, [props.day, props.user, handleAddChange, handleRemoveChange]);
 
   // gets the current logged in user
   async function getUser() {
@@ -124,6 +62,10 @@ const Day = (props) => {
       const userData = await person.json();
       setUserActivities(responseData);
       setUser(userData);
+      const todayActivities = responseData.filter((activity) => {
+        return activity.date.split("T")[0] === convertedDate;
+      });
+      setActCount(todayActivities.length);
     } catch (error) {
       console.log(error);
     }
@@ -219,17 +161,6 @@ const Day = (props) => {
   function handleClick() {
     setOnClick((prevState) => !prevState);
     setBorderRadius(onClick ? "5px" : "5px 5px 0px 0px");
-  }
-  // fetching the activities for the day from the respective user state
-  function getDaysActivities() {
-    try {
-      const res = userActivities?.filter((activity) => {
-        return activity.date.split("T")[0] === convertedDate;
-      });
-      setActCount(res.length);
-    } catch (error) {
-      console.log(error.message);
-    }
   }
 
   return (
