@@ -1,8 +1,19 @@
 .mainPage {
   display: flex;
   flex-direction: column;
+  background-color: bisque;
 }
 .mainPage .navbar {
+  background-color: rgba(119, 119, 119, 0.361);
+  background-image: url(./assets/images/Background_main.png);
+  background-size: 20em;
+  background-repeat: repeat-x;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 1fr;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  justify-items: center;
   background-color: rgba(119, 119, 119, 0.361);
   background-image: url(./assets/images/Background_main.png);
   background-size: 20em;
@@ -20,6 +31,7 @@
 }
 .mainPage .navbar .navbarCenter .viewMonth {
   text-align: center;
+  font-size: 1.8rem;
 }
 .mainPage .navbar .navbarCenter .goal {
   display: flex;
@@ -32,6 +44,31 @@
   border: 2px solid black;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
+}
+.mainPage .navbar .navbarCenter .navbarWeeks {
+  display: flex;
+  justify-content: space-between;
+  flex: 1;
+}
+.mainPage .navbar .navbarCenter .navbarWeeks .weekNumber {
+  font-size: 1.4rem;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+}
+.mainPage .navbar .navbarCenter .navbarWeeks .btn-weekNumber {
+  padding: 3px 2px;
+  border: rgba(0, 0, 0, 0.7) 1px solid;
+  border-radius: 10px;
+  background-color: #08c0fd;
+  cursor: pointer;
+  font-size: 1rem;
+  flex: 1;
+}
+.mainPage .navbar .navbarCenter .navbarWeeks .btn-weekNumber:hover {
+  background-color: #106cd0;
 }
 .mainPage .navbar .navbarRight {
   display: flex;
@@ -179,7 +216,8 @@
   flex-direction: row;
   align-self: flex-end;
 }
-.mainPage #dayContent .buttonContainer .addButton, .mainPage #dayContent .buttonContainer .removeButton {
+.mainPage #dayContent .buttonContainer .addButton,
+.mainPage #dayContent .buttonContainer .removeButton {
   border: none;
   color: white;
   border-radius: 50%;
@@ -217,4 +255,7 @@
   background-color: rgb(66, 32, 32);
   box-shadow: inset 0px 0px 5px 1px rgba(192, 98, 98, 0.7);
   outline: 0.01rem solid rgb(77, 33, 33);
+}
+.mainPage .NoteBoard {
+  margin: 0;
 }/*# sourceMappingURL=App.css.map */

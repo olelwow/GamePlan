@@ -14,6 +14,7 @@ const Day = (props) => {
 
   const [expandDay, setExpandDay] = useState(false);
   const [activities, setActivities] = useState([]);
+  const [activityCount, setActivityCount] = useState(0);
   const [user, setUser] = useState([]);
   const [userActivities, setUserActivities] = useState([]);
   const [addIsClicked, setAddIsClicked] = useState(false);
@@ -35,8 +36,25 @@ const Day = (props) => {
   };
   //useeffect to fetch activities and display them when the
   //day is expanded and wanting to add activity to that day, show as a list or something.
+  const fetchActivities = async () => {
+    const response = await fetch(
+      `https://localhost:7136/api/users/${props.user}/activities`
+    );
+
+    const data = await response.json();
+    const todayActivities = data.filter(
+      (activity) =>
+        new Date(activity.date).toDateString() === props.day.toDateString()
+    );
+    setActivities(todayActivities);
+    setActivityCount(todayActivities.length);
+  };
+
   useEffect(() => {
-    let expandedDay = true;
+    fetchActivities();
+  }, [props.user, props.day]);
+
+  useEffect(() => {
     if (expandDay) {
       setActivities(activityList);
       // const fetchActivities = async () => {
@@ -48,10 +66,33 @@ const Day = (props) => {
       // };
       // fetchActivities();
     }
-    return () => {
-      expandedDay = false;
-    };
   }, [expandDay]);
+
+  const toggleActivity = async (activity) => {
+    const activityState = !activity.completed;
+    const activityXp = activityState ? activity.xp : -activity.xp;
+
+    const updatedActivity = { ...activity, completed: activityState };
+    await fetch(`https://localhost:7136/api/activities/${activity.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedActivity),
+    });
+
+    await fetch(`https://localhost:7136/api/users/${props.user.user}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ xp: activityXp }),
+    });
+
+    setActivities(
+      activities.map((a) => (a.id === activity.id ? updatedActivity : a))
+    );
+  };
 
   // useeffect for fetching things on load
   useEffect(() => {
@@ -185,12 +226,12 @@ const Day = (props) => {
       <button
         style={{ borderRadius: borderRadius }}
         className="day"
-        onClick={function () {
+        onClick={() => {
           setExpandDay(!expandDay), handleClick();
         }}
       >
         {TodaysDate()}
-        <p>{actCount}</p>
+        <p>{activities.length} aktiviteter</p>
         <img
           src={onClick ? ArrowUp : ArrowDown}
           alt="arrow"
@@ -200,8 +241,22 @@ const Day = (props) => {
 
       {expandDay && (
         <div id="dayContent">
-          <p className="activitySummary">Aktivitet för {TodaysDate()}</p>
-
+          {activities.length > 0 ? (
+            activities.map((activity) => (
+              <div key={activity.id}>
+                <input
+                  type="checkbox"
+                  checked={activity.completed}
+                  onChange={() => toggleActivity(activity)}
+                />
+                <span>
+                  {activity.name} - XP: {activity.xp}
+                </span>
+              </div>
+            ))
+          ) : (
+            <p>Inga aktiviteter idag.</p>
+          )}
           {userActivities && userActivities?.length > 0 ? (
             userActivities?.map((activity) => {
               const activityDate = activity.date.split("T")[0];
@@ -214,52 +269,16 @@ const Day = (props) => {
           ) : (
             <p>No activities found</p>
           )}
-
           <div className="buttonContainer">
             <button className="addButton" onClick={AddActivity}>
+              {" "}
               +
             </button>
-            {addIsClicked && (
-              <form onSubmit={handleAddSubmit}>
-                <select onChange={handleAddChange}>
-                  <option value="0">Select activity</option>
-                  {activities.map((activity) => (
-                    <option
-                      key={activity.id}
-                      value={activity.id}
-                      name={activity}
-                    >
-                      {activity.name} {activity.xp} XP{" "}
-                    </option>
-                  ))}
-                </select>
-                <button type="submit">Save</button>
-              </form>
-            )}
-
             {activities && (
               <button className="removeButton" onClick={RemoveActivity}>
                 {" "}
                 -
               </button>
-            )}
-            {removeIsClicked && (
-              <form onSubmit={handleRemoveSubmit}>
-                <select onChange={handleRemoveChange}>
-                  <option value="0">Select activity</option>
-                  {userActivities.map((activity) => (
-                    <option
-                      key={activity.id}
-                      value={activity.id}
-                      name={activity}
-                    >
-                      {activity.name} {activity.xp} XP{" "}
-                      {activity.date.split("T")[0]}
-                    </option>
-                  ))}
-                </select>
-                <button type="submit">Save</button>
-              </form>
             )}
           </div>
         </div>

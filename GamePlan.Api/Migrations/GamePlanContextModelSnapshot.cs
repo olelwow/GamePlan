@@ -92,6 +92,9 @@ namespace GamePlan.Api.Migrations
                     b.Property<int?>("Level")
                         .HasColumnType("int");
 
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Password")
                         .HasColumnType("nvarchar(max)");
 
@@ -110,6 +113,7 @@ namespace GamePlan.Api.Migrations
                         {
                             Id = 1,
                             Level = 0,
+                            Notes = "[]",
                             Password = "1234",
                             UserName = "Jonas69",
                             Xp = 35
@@ -118,6 +122,7 @@ namespace GamePlan.Api.Migrations
                         {
                             Id = 2,
                             Level = 3,
+                            Notes = "[]",
                             Password = "9876",
                             UserName = "Rasmus420",
                             Xp = 69
@@ -126,6 +131,7 @@ namespace GamePlan.Api.Migrations
                         {
                             Id = 3,
                             Level = 10,
+                            Notes = "[]",
                             Password = "Partille4Life",
                             UserName = "PartilleJohnny",
                             Xp = 200

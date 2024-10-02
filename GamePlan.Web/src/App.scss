@@ -9,6 +9,7 @@
 
 .mainPage {
   @include flexColumn;
+  background-color: bisque;
 
   .navbar {
     background-color: rgba(119, 119, 119, 0.361);
@@ -33,6 +34,7 @@
     .navbarCenter {
       .viewMonth {
         text-align: center;
+        font-size: 1.8rem;
       }
       .goal {
         display: flex;
@@ -45,6 +47,34 @@
         border: 2px solid black;
         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
         border-radius: 10px;
+      }
+
+      .navbarWeeks {
+        display: flex;
+        justify-content: space-between;
+        flex: 1;
+
+        .weekNumber {
+          font-size: 1.4rem;
+          font-weight: bold;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex: 1;
+        }
+        .btn-weekNumber {
+          padding: 3px 2px;
+          border: rgba(0, 0, 0, 0.7) 1px solid;
+          border-radius: 10px;
+          background-color: #08c0fd;
+          cursor: pointer;
+          font-size: 1rem;
+          flex: 1;
+
+          &:hover {
+            background-color: #106cd0;
+          }
+        }
       }
     }
 
@@ -171,32 +201,30 @@
     border: none;
     background-color: rgb(81, 146, 148);
     cursor: pointer;
-    align-items:center;
+    align-items: center;
     justify-content: space-between;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.7),
-    inset 0px 3px 5px 3px  rgba(142, 251, 255, 0.7);
-    
-    .arrow{
+      inset 0px 3px 5px 3px rgba(142, 251, 255, 0.7);
+
+    .arrow {
       width: 0.5rem;
     }
   }
-
-  
 
   #dayContent {
     @include flexColumn;
     background-color: rgb(71, 134, 136);
 
-    width:50%;
-    padding:0;
-    margin:-10px;
-    margin-bottom:10px;
+    width: 50%;
+    padding: 0;
+    margin: -10px;
+    margin-bottom: 10px;
     box-sizing: border-box;
-    border-radius:0 0 5px 5px;
+    border-radius: 0 0 5px 5px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.7),
-    inset 0px -4px 5px 3px  rgba(142, 251, 255, 0.7);
+      inset 0px -4px 5px 3px rgba(142, 251, 255, 0.7);
 
-    .activitySummary{
+    .activitySummary {
       padding-left: 0.5rem;
     }
 
@@ -205,11 +233,12 @@
       padding-left: 0.5rem;
     }
 
-    .buttonContainer{
+    .buttonContainer {
       @include flexRow;
       align-self: flex-end;
-      
-      .addButton, .removeButton{
+
+      .addButton,
+      .removeButton {
         border: none;
         color: white;
         border-radius: 50%;
@@ -217,40 +246,43 @@
         height: 1.2rem;
         cursor: pointer;
         margin: 0.5rem;
-        }
+      }
 
-        .addButton{
-          background-color: rgb(81, 148, 84);
-          box-shadow: inset 0px 0px 5px 1px  rgba(98, 192, 98, 0.7);
-          outline: 0.01rem solid rgb(33, 77, 37);
-        }
-        .addButton:hover{
-          background-color: rgb(91, 185, 96);
-          box-shadow: 0px 0px 8px 3px  rgba(98, 192, 98, 0.7);
-          outline: 0.01rem solid rgb(33, 77, 37);
-        }
-        .addButton:active{
-          background-color: rgb(32, 66, 34);
-          box-shadow: inset 0px 0px 5px 1px  rgba(98, 192, 98, 0.7);
-          outline: 0.01rem solid rgb(33, 77, 37);
-        }
-    
-        .removeButton{
-          background-color: rgb(148, 81, 81);
-          box-shadow: inset 0px 0px 5px 1px  rgba(192, 98, 98, 0.7);
-          outline: 0.01rem solid rgb(77, 33, 33);
-        }
-        .removeButton:hover{
-          background-color: rgb(228, 112, 112);
-          box-shadow: 0px 0px 8px 3px  rgba(192, 98, 98, 0.7);
-          outline: 0.01rem solid rgb(77, 33, 33);
-        }
-        .removeButton:active{
-          background-color: rgb(66, 32, 32);
-          box-shadow: inset 0px 0px 5px 1px  rgba(192, 98, 98, 0.7);
-          outline: 0.01rem solid rgb(77, 33, 33);
-        }
+      .addButton {
+        background-color: rgb(81, 148, 84);
+        box-shadow: inset 0px 0px 5px 1px rgba(98, 192, 98, 0.7);
+        outline: 0.01rem solid rgb(33, 77, 37);
+      }
+      .addButton:hover {
+        background-color: rgb(91, 185, 96);
+        box-shadow: 0px 0px 8px 3px rgba(98, 192, 98, 0.7);
+        outline: 0.01rem solid rgb(33, 77, 37);
+      }
+      .addButton:active {
+        background-color: rgb(32, 66, 34);
+        box-shadow: inset 0px 0px 5px 1px rgba(98, 192, 98, 0.7);
+        outline: 0.01rem solid rgb(33, 77, 37);
+      }
+
+      .removeButton {
+        background-color: rgb(148, 81, 81);
+        box-shadow: inset 0px 0px 5px 1px rgba(192, 98, 98, 0.7);
+        outline: 0.01rem solid rgb(77, 33, 33);
+      }
+      .removeButton:hover {
+        background-color: rgb(228, 112, 112);
+        box-shadow: 0px 0px 8px 3px rgba(192, 98, 98, 0.7);
+        outline: 0.01rem solid rgb(77, 33, 33);
+      }
+      .removeButton:active {
+        background-color: rgb(66, 32, 32);
+        box-shadow: inset 0px 0px 5px 1px rgba(192, 98, 98, 0.7);
+        outline: 0.01rem solid rgb(77, 33, 33);
+      }
     }
   }
-}
 
+  .NoteBoard {
+    margin:0;  
+  }
+}
