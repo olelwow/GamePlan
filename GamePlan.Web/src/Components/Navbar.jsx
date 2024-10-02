@@ -1,6 +1,5 @@
 import { useState, useEffect, useContext } from "react";
 import UserMenu from "./NavbarComponents/UserMenu";
-// import BurgerMenu from "./NavbarComponents/BurgerMenu";
 import NavbarBackground from "../assets/images/Background_main.png";
 import Week from "./Week";
 import { WeekProvider, WeekContext } from "./WeekContext";
@@ -39,7 +38,6 @@ const Navbar = (props) => {
   return (
     <nav className="navbar">
       <div className="navbarLeft">
-        {/* <BurgerMenu /> */}
       </div>
       <div className="navbarCenter">
         <h2 className="viewMonth">{month}</h2>
