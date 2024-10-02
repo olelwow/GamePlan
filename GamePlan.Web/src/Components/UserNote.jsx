@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 const UserNotes = (props) => {
   const [notes, setNotes] = useState([]);
   const [userNoteInputValue, setNoteInputValue] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
  
 
   const fetchNotes = async () => {
@@ -27,8 +28,16 @@ const UserNotes = (props) => {
   }, [props.user]);
 
   const addNote = async () => {
-    // if (!userNoteInputValue) return;
-    // const newNote = { noteText: userNoteInputValue };
+    if (!userNoteInputValue.trim()) {
+        setErrorMessage("Anteckningen kan inte vara tom.");
+        return;
+      }
+
+      if (userNoteInputValue.length > 30) {
+        setErrorMessage("Anteckningen får inte vara längre än 30 tecken.");
+        return;
+      }
+      setErrorMessage("");
 
     try {
         const response = await fetch(`https://localhost:7136/api/users/${props.user}/notes`, {
@@ -86,6 +95,7 @@ const UserNotes = (props) => {
           placeholder="Add new note"
         />
         <button onClick={addNote}>Add</button>
+        {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
       </div>
       <div>
         <ul>
