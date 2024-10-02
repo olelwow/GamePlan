@@ -107,7 +107,7 @@ export default Day;
 
 const styles = StyleSheet.create({
   day: {
-    backgroundColor: "gray",
+    backgroundColor: "rgb(71,134,136)",
     padding: 10,
     marginBottom: 5,
     borderRadius: 5,
