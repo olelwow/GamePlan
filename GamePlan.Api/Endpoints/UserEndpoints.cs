@@ -127,7 +127,7 @@ namespace GamePlan.Api.Endpoints
             {
                 return Results.NotFound(UserNotFound(id));
             }
-
+                
             currentUser.Xp += userDto.Xp;
 
             if (currentUser.Xp >= 200) 

@@ -4,7 +4,6 @@ import NavbarBackground from "../assets/images/Background_main.png";
 import Week from "./Week";
 import { WeekProvider, WeekContext } from "./WeekContext";
 
-
 const Navbar = (props) => {
   const [goalXp, setGoalXp] = useState(200);
   const [user, setUser] = useState({});
@@ -14,6 +13,8 @@ const Navbar = (props) => {
     decreaseWeekNumber,
     month,
     setMonth,
+    toggleActivity,
+    nikos,
   } = useContext(WeekContext);
 
   const viewMonth = () => {
@@ -31,8 +32,11 @@ const Navbar = (props) => {
   };
 
   useEffect(() => {
+    user.xp = nikos.xp;
+  }, [toggleActivity]);
+
+  useEffect(() => {
     getUser();
-    console.log("using effect");
   }, []);
 
   return (
@@ -42,9 +46,13 @@ const Navbar = (props) => {
       <div className="navbarCenter">
         <h2 className="viewMonth">{month}</h2>
         <div className="navbarWeeks">
-          <button className="btn-weekNumber" onClick={decreaseWeekNumber}>Föreg.</button>
+          <button className="btn-weekNumber" onClick={decreaseWeekNumber}>
+            Föreg.
+          </button>
           <span className="weekNumber"> Vecka {weekNumber}</span>
-          <button className="btn-weekNumber" onClick={increaseWeekNumber}>Nästa</button>
+          <button className="btn-weekNumber" onClick={increaseWeekNumber}>
+            Nästa
+          </button>
         </div>
         <div className="goal" style={xpBar(user.xp / 2)}>
           <p>

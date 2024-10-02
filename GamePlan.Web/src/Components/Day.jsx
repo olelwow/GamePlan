@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import ArrowDown from "../assets/images/arrowDown.png";
 import ArrowUp from "../assets/images/arrowUp.png";
+import { WeekContext } from "./WeekContext";
 
 const Day = (props) => {
   const activityList = [
@@ -12,15 +13,16 @@ const Day = (props) => {
   let objectifiedDay = new Date(props.day);
   let convertedDate = objectifiedDay.toISOString().split("T")[0];
 
+  const { toggleActivity } = useContext(WeekContext);
   const [expandDay, setExpandDay] = useState(false);
   const [activities, setActivities] = useState([]);
-  const [activityCount, setActivityCount] = useState(0);
   const [user, setUser] = useState([]);
   const [userActivities, setUserActivities] = useState([]);
   const [addIsClicked, setAddIsClicked] = useState(false);
   const [removeIsClicked, setRemoveIsClicked] = useState(false);
   const [selectedActivityId, setSelectedActivityId] = useState("");
   const [actCount, setActCount] = useState();
+  const [isChecked, setIsChecked] = useState(false);
 
   // states for styling
   const [onClick, setOnClick] = useState(false);
@@ -34,86 +36,36 @@ const Day = (props) => {
     });
     return todaysDate;
   };
-  //useeffect to fetch activities and display them when the
-  //day is expanded and wanting to add activity to that day, show as a list or something.
-  const fetchActivities = async () => {
-    const response = await fetch(
-      `https://localhost:7136/api/users/${props.user}/activities`
-    );
-
-    const data = await response.json();
-    const todayActivities = data.filter(
-      (activity) =>
-        new Date(activity.date).toDateString() === props.day.toDateString()
-    );
-    setActivities(todayActivities);
-    setActivityCount(todayActivities.length);
-  };
-
-  useEffect(() => {
-    fetchActivities();
-  }, [props.user, props.day]);
 
   useEffect(() => {
     if (expandDay) {
       setActivities(activityList);
-      // const fetchActivities = async () => {
-      //   const response = await fetch("https://localhost:7136/api/activities/");
-      //   const data = await response.json();
-      //   if (expandedDay) {
-      //     setActivities(data);
-      //   }
-      // };
-      // fetchActivities();
     }
   }, [expandDay]);
-
-  const toggleActivity = async (activity) => {
-    const activityState = !activity.completed;
-    const activityXp = activityState ? activity.xp : -activity.xp;
-
-    const updatedActivity = { ...activity, completed: activityState };
-    await fetch(`https://localhost:7136/api/activities/${activity.id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(updatedActivity),
-    });
-
-    await fetch(`https://localhost:7136/api/users/${props.user.user}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ xp: activityXp }),
-    });
-
-    setActivities(
-      activities.map((a) => (a.id === activity.id ? updatedActivity : a))
-    );
-  };
 
   // useeffect for fetching things on load
   useEffect(() => {
     const fetchData = async () => {
-      getDaysActivities();
       await getUser();
     };
     fetchData();
-  }, [props.day]);
+  }, [props.day, props.user, handleAddChange, handleRemoveChange]);
 
   // gets the current logged in user
   async function getUser() {
     try {
       const response = await fetch(
-        "https://localhost:7136/api/users/3/activities"
+        `https://localhost:7136/api/users/${props.user}/activities`
       );
       const responseData = await response.json();
-      const person = await fetch("https://localhost:7136/api/users/3");
+      const person = await fetch("https://localhost:7136/api/users/1");
       const userData = await person.json();
       setUserActivities(responseData);
       setUser(userData);
+      const todayActivities = responseData.filter((activity) => {
+        return activity.date.split("T")[0] === convertedDate;
+      });
+      setActCount(todayActivities.length);
     } catch (error) {
       console.log(error);
     }
@@ -194,10 +146,10 @@ const Day = (props) => {
     } else {
       console.log("Activity removed");
     }
-    const res = await fetch("https://localhost:7136/api/users/3/activities");
+    const res = await fetch("https://localhost:7136/api/users/1/activities");
     if (!res.ok) {
       SaveActivity({
-        name: "",
+        name: "empty",
         xp: 0,
         date: props.day,
         userId: 3,
@@ -210,16 +162,6 @@ const Day = (props) => {
     setOnClick((prevState) => !prevState);
     setBorderRadius(onClick ? "5px" : "5px 5px 0px 0px");
   }
-  function getDaysActivities() {
-    try {
-      const res = userActivities?.filter((activity) => {
-        return activity.date.split("T")[0] === convertedDate;
-      });
-      setActCount(res.length);
-    } catch (error) {
-      console.log(error.message);
-    }
-  }
 
   return (
     <>
@@ -231,7 +173,7 @@ const Day = (props) => {
         }}
       >
         {TodaysDate()}
-        <p>{activities.length} aktiviteter</p>
+        <p>{actCount} aktiviteter</p>
         <img
           src={onClick ? ArrowUp : ArrowDown}
           alt="arrow"
@@ -241,29 +183,30 @@ const Day = (props) => {
 
       {expandDay && (
         <div id="dayContent">
-          {activities.length > 0 ? (
-            activities.map((activity) => (
-              <div key={activity.id}>
-                <input
-                  type="checkbox"
-                  checked={activity.completed}
-                  onChange={() => toggleActivity(activity)}
-                />
-                <span>
-                  {activity.name} - XP: {activity.xp}
-                </span>
-              </div>
-            ))
-          ) : (
-            <p>Inga aktiviteter idag.</p>
-          )}
           {userActivities && userActivities?.length > 0 ? (
             userActivities?.map((activity) => {
               const activityDate = activity.date.split("T")[0];
               return activityDate === convertedDate ? (
-                <p className="activity" key={activity.id}>
-                  Idag är det ❤️{activity.name}❤️
-                </p>
+                <div className="activity" key={activity.id}>
+                  <p key={activity.id}>Idag är det {activity.name}</p>
+                  <input
+                    className="checkbox"
+                    type="checkbox"
+                    checked={activity.completed}
+                    value={isChecked}
+                    onClick={(e) => e.preventDefault()}
+                    // {isChecked}
+                    onChange={() =>
+                      toggleActivity(
+                        activity,
+                        [isChecked, setIsChecked],
+                        [activities, setActivities],
+                        props
+                      )
+                    }
+                  />
+                  <p className="xpAmount"> XP: {activity.xp}</p>
+                </div>
               ) : null;
             })
           ) : (
@@ -274,11 +217,51 @@ const Day = (props) => {
               {" "}
               +
             </button>
+            {addIsClicked && (
+              <form onSubmit={handleAddSubmit}>
+                <select onChange={handleAddChange}>
+                  <option value="0">Select activity</option>
+                  {activities.map((activity) => (
+                    <option
+                      key={activity.id}
+                      value={activity.id}
+                      name={activity}
+                    >
+                      {activity.name} {activity.xp} XP{" "}
+                    </option>
+                  ))}
+                </select>
+                <button type="submit">Save</button>
+              </form>
+            )}
+
             {activities && (
               <button className="removeButton" onClick={RemoveActivity}>
                 {" "}
                 -
               </button>
+            )}
+            {removeIsClicked && (
+              <form onSubmit={handleRemoveSubmit}>
+                <select onChange={handleRemoveChange}>
+                  <option value="0">Select activity</option>
+                  {userActivities.map(
+                    (activity) =>
+                      activity.xp !== 0 &&
+                      activity.date.split("T")[0] === convertedDate && (
+                        <option
+                          key={activity.id}
+                          value={activity.id}
+                          name={activity}
+                        >
+                          {activity.name} {activity.xp} XP{" "}
+                          {activity.date.split("T")[0]}
+                        </option>
+                      )
+                  )}
+                </select>
+                <button type="submit">Save</button>
+              </form>
             )}
           </div>
         </div>
