@@ -41,7 +41,7 @@
         justify-content: center;
         align-items: center;
         height: 2rem;
-        width: 25rem;
+        width: 23rem;
         margin-bottom: 0.5rem;
         font-weight: bold;
         border: 2px solid black;
@@ -97,7 +97,7 @@
         .userDropdown {
           position: absolute;
           top: -2em;
-          background-color: rgb(176, 196, 222);
+          background-color: rgba(222, 204, 176, 0.897);
           box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
           border-radius: 4px;
           width: 9.5rem;
@@ -189,15 +189,30 @@
     justify-content: space-around;
     background-color: lightgray;
     align-items: center;
-    gap: 10px;
+    gap: 5px;
     margin: 1rem;
+    min-height: 35em;
+    max-height: 35em;
+    overflow: auto;
+    box-sizing: content-box;
+
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+    }
+    &::-webkit-scrollbar-track {
+      background-color: transparent;
+    }
   }
 
   .day {
     @include flexRow;
     padding-left: 0.5rem;
     width: 50%;
-    height: 2rem;
+    height: 3rem;
     border: none;
     background-color: rgb(81, 146, 148);
     cursor: pointer;
@@ -205,9 +220,18 @@
     justify-content: space-between;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.7),
       inset 0px 3px 5px 3px rgba(142, 251, 255, 0.7);
-
+    font-size: 1em;
+    .dayDate {
+      flex: 1.5;
+      text-align: start;
+    }
+    .activityCount {
+      flex: 1.5;
+      text-align: start;
+    }
     .arrow {
       width: 0.5rem;
+      flex: 0.01;
     }
   }
 
@@ -283,6 +307,58 @@
   }
 
   .NoteBoard {
-    margin:0;  
+    margin: 0;
+    min-height: 25em;
+    overflow-y: scroll;
+    overflow: hidden;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .mainPage {
+    margin: -7px;
+    padding: -10px;
+
+    .navbar {
+      background-size: 28em;
+      align-items: start;
+
+      .navbarCenter {
+        .navbarWeeks {
+          margin-bottom: 0.5em;
+        }
+      }
+      .navbarRight {
+        .userContainer {
+          margin-left: -7em;
+          .userImg {
+            justify-self: end;
+          }
+          .userDropdown {
+            top: 0em;
+            width: 7rem;
+          }
+        }
+      }
+    }
+    .weekday {
+      .day {
+        width: 20em;
+      }
+      #dayContent {
+        width: 20em;
+        .activity {
+          @include flexRow;
+          gap: 0.5em;
+          .checkbox {
+            width: 1.5em;
+          }
+        }
+      }
+    }
+    .NoteBoard {
+      margin-left: 1rem;
+      min-height: 10em;
+    }
   }
 }

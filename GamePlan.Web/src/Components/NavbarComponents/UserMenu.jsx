@@ -5,7 +5,7 @@ import { useState } from "react";
 
 const UserMenu = (props) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const menuOptions = ["User Settings", "Log out", "Whatever"];
+  const menuOptions = ["Inställningar", "Logga ut", "Whatever"];
 
   const toggleDropdown = () => {
     setIsDropdownOpen((prevState) => !prevState);

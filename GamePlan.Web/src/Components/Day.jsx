@@ -27,11 +27,12 @@ const Day = (props) => {
   const [borderRadius, setBorderRadius] = useState("5px");
 
   const TodaysDate = () => {
-    const date = new Date();
-    const todaysDate = props.day.toLocaleDateString("sv-SE", {
+    let todaysDate = props.day.toLocaleDateString("sv-SE", {
       weekday: "long",
       day: "numeric",
+      month: "numeric",
     });
+    todaysDate = todaysDate.charAt(0).toUpperCase() + todaysDate.slice(1);
     return todaysDate;
   };
   //useeffect to fetch activities and display them when the

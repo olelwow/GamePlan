@@ -9,11 +9,12 @@ const Day = (props) => {
 
   const TodaysDate = () => {
     // const date = new Date();
-    const todaysDate = props.day.toLocaleDateString("sv-SE", {
+    let todaysDate = props.day.toLocaleDateString("sv-SE", {
       weekday: "long",
       day: "numeric",
       month: "numeric",
     });
+    todaysDate = todaysDate.charAt(0).toUpperCase() + todaysDate.slice(1);
     return todaysDate;
   };
 
