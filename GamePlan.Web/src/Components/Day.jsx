@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import ArrowDown from "../assets/images/arrowDown.png";
 import ArrowUp from "../assets/images/arrowUp.png";
+import { WeekContext } from "./WeekContext";
 
 const Day = (props) => {
   const activityList = [
@@ -12,6 +13,7 @@ const Day = (props) => {
   let objectifiedDay = new Date(props.day);
   let convertedDate = objectifiedDay.toISOString().split("T")[0];
 
+  const { toggleActivity } = useContext(WeekContext);
   const [expandDay, setExpandDay] = useState(false);
   const [activities, setActivities] = useState([]);
   const [user, setUser] = useState([]);
@@ -61,45 +63,46 @@ const Day = (props) => {
 
   // function that toggles the activity to completed or not
   // abd updates the xp of the user and the activity status in the database
-  const toggleActivity = async (activity) => {
-    setIsChecked((prevState) => !prevState);
-    activity.completed = isChecked;
-    const activityXp = activity.completed && activity.xp;
 
-    const updatedActivity = {
-      ...activity,
-      completed: activity.completed,
-      date: activity.date,
-    };
-    await fetch(`https://localhost:7136/api/activities/${activity.id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(updatedActivity),
-    });
+  // const toggleActivity = async (activity) => {
+  //   setIsChecked((prevState) => !prevState);
+  //   activity.completed = isChecked;
+  //   const activityXp = activity.completed && activity.xp;
 
-    if (activityXp > 0) {
-      const res = await fetch(
-        `https://localhost:7136/api/users/${props.user}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ xp: activityXp }),
-        }
-      );
-      if (res.ok) {
-        console.log("xp updated");
-      } else {
-        console.log("error updating xp");
-      }
-    }
-    setActivities(
-      activities.map((a) => (a.id === activity.id ? updatedActivity : a))
-    );
-  };
+  //   const updatedActivity = {
+  //     ...activity,
+  //     completed: activity.completed,
+  //     date: activity.date,
+  //   };
+  //   await fetch(`https://localhost:7136/api/activities/${activity.id}`, {
+  //     method: "PUT",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify(updatedActivity),
+  //   });
+
+  //   if (activityXp > 0) {
+  //     const res = await fetch(
+  //       `https://localhost:7136/api/users/${props.user}`,
+  //       {
+  //         method: "PUT",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify({ xp: activityXp }),
+  //       }
+  //     );
+  //     if (res.ok) {
+  //       console.log("xp updated");
+  //     } else {
+  //       console.log("error updating xp");
+  //     }
+  //   }
+  //   setActivities(
+  //     activities.map((a) => (a.id === activity.id ? updatedActivity : a))
+  //   );
+  // };
 
   // useeffect for fetching things on load
   useEffect(() => {
@@ -262,7 +265,14 @@ const Day = (props) => {
                     value={isChecked}
                     onClick={(e) => e.preventDefault()}
                     // {isChecked}
-                    onChange={() => toggleActivity(activity)}
+                    onChange={() =>
+                      toggleActivity(
+                        activity,
+                        [isChecked, setIsChecked],
+                        [activities, setActivities],
+                        props
+                      )
+                    }
                   />
                   <p className="xpAmount"> XP: {activity.xp}</p>
                 </div>
