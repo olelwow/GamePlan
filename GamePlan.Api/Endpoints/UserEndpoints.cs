@@ -73,13 +73,13 @@ namespace GamePlan.Api.Endpoints
         }
 
             private static async Task<IResult> UpdateUserXpById(GamePlanContext context, int id, UpdateUserXpDto userDto)
-        {
+            {
             var currentUser = await context.Users.FindAsync(id);
             if (currentUser == null)
             {
                 return Results.NotFound(UserNotFound(id));
             }
-
+                
             currentUser.Xp += userDto.Xp;
 
             if (currentUser.Xp >= 200) 

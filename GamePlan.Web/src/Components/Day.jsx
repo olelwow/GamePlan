@@ -14,7 +14,6 @@ const Day = (props) => {
 
   const [expandDay, setExpandDay] = useState(false);
   const [activities, setActivities] = useState([]);
-  const [activityCount, setActivityCount] = useState(0);
   const [user, setUser] = useState([]);
   const [userActivities, setUserActivities] = useState([]);
   const [addIsClicked, setAddIsClicked] = useState(false);
@@ -48,7 +47,6 @@ const Day = (props) => {
         new Date(activity.date).toDateString() === props.day.toDateString()
     );
     setActivities(todayActivities);
-    setActivityCount(todayActivities.length);
   };
 
   useEffect(() => {
@@ -58,37 +56,19 @@ const Day = (props) => {
   useEffect(() => {
     if (expandDay) {
       setActivities(activityList);
-      // const fetchActivities = async () => {
-      //   const response = await fetch("https://localhost:7136/api/activities/");
-      //   const data = await response.json();
-      //   if (expandedDay) {
-      //     setActivities(data);
-      //   }
-      // };
-      // fetchActivities();
     }
   }, [expandDay]);
 
+  // function that toggles the activity to completed or not
+  // abd updates the xp of the user and the activity status in the database
   const toggleActivity = async (activity) => {
-    const user = await fetch(`https://localhost:7136/api/users/${props.user}`);
-    const userData = await user.json();
-    let userXp = userData.xp;
-
     setIsChecked((prevState) => !prevState);
     activity.completed = isChecked;
-    // const activityState = activity.completed;
-    let activityXp;
-    if (!isChecked) {
-      userXp -= activity.xp;
-    } else {
-      userXp += activity.xp;
-    }
-
-    console.log(userXp);
+    const activityXp = activity.completed && activity.xp;
 
     const updatedActivity = {
       ...activity,
-      completed: isChecked,
+      completed: activity.completed,
       date: activity.date,
     };
     await fetch(`https://localhost:7136/api/activities/${activity.id}`, {
@@ -99,16 +79,23 @@ const Day = (props) => {
       body: JSON.stringify(updatedActivity),
     });
 
-    if (activity.xp > 0) {
-      await fetch(`https://localhost:7136/api/users/${props.user}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ xp: userXp }),
-      });
+    if (activityXp > 0) {
+      const res = await fetch(
+        `https://localhost:7136/api/users/${props.user}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ xp: activityXp }),
+        }
+      );
+      if (res.ok) {
+        console.log("xp updated");
+      } else {
+        console.log("error updating xp");
+      }
     }
-
     setActivities(
       activities.map((a) => (a.id === activity.id ? updatedActivity : a))
     );
@@ -230,6 +217,7 @@ const Day = (props) => {
     setOnClick((prevState) => !prevState);
     setBorderRadius(onClick ? "5px" : "5px 5px 0px 0px");
   }
+  // fetching the activities for the day from the respective user state
   function getDaysActivities() {
     try {
       const res = userActivities?.filter((activity) => {
@@ -251,7 +239,7 @@ const Day = (props) => {
         }}
       >
         {TodaysDate()}
-        <p>{activities.length} aktiviteter</p>
+        <p>{actCount} aktiviteter</p>
         <img
           src={onClick ? ArrowUp : ArrowDown}
           alt="arrow"
@@ -261,32 +249,18 @@ const Day = (props) => {
 
       {expandDay && (
         <div id="dayContent">
-          {/* {activities.length > 0 ? (
-            activities.map((activity) => (
-              <div key={activity.id}>
-                <input
-                  type="checkbox"
-                  checked={activity.completed}
-                  onChange={() => toggleActivity(activity)}
-                />
-                <span>
-                  {activity.name} - XP: {activity.xp}
-                </span>
-              </div>
-            ))
-          ) : (
-            <p>Inga aktiviteter idag.</p>
-          )} */}
           {userActivities && userActivities?.length > 0 ? (
             userActivities?.map((activity) => {
               const activityDate = activity.date.split("T")[0];
               return activityDate === convertedDate ? (
                 <div className="activity" key={activity.id}>
-                  <p key={activity.id}>Idag är det 💩{activity.name}💩</p>
+                  <p key={activity.id}>Idag är det {activity.name}</p>
                   <input
                     className="checkbox"
                     type="checkbox"
                     checked={activity.completed}
+                    value={isChecked}
+                    onClick={(e) => e.preventDefault()}
                     // {isChecked}
                     onChange={() => toggleActivity(activity)}
                   />
