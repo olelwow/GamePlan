@@ -2,6 +2,7 @@ import { useState } from "react";
 import { WeekProvider } from './Components/WeekContext'
 import Navbar from './Components/Navbar'
 import Week from './Components/Week'
+import UserNote from "./Components/UserNote";
 import './App.css'
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
       <Navbar user={user} />
       <Week user={user} />
       </WeekProvider>
+      <UserNote user={user} />
     </div>
   );
 }
