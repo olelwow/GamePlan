@@ -1,6 +1,7 @@
+
 import { createContext, useState, useEffect } from "react";
 import Navbar from "./Navbar";
-//skapar ett context objekt som delar veckorelaterad data mellan komponenterna
+//Create a context to share week-data between components
 const WeekContext = createContext();
 
 const WeekProvider = ({ children }) => {
@@ -97,6 +98,7 @@ const WeekProvider = ({ children }) => {
       completed: activity.completed,
       date: activity.date,
     };
+
     await fetch(`https://localhost:7136/api/activities/${activity.id}`, {
       method: "PUT",
       headers: {
@@ -114,6 +116,23 @@ const WeekProvider = ({ children }) => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ xp: activityXp }),
+
+
+    const changeMonth = (weekDays) => {
+        const displayedDays = weekDays.map((m) => getCurrentMonth(m));
+
+        const isSameMonth = (values) => {
+            const halfLength = Math.floor(values.length / 2);
+            return values.every((value) => value === values[halfLength]);
+        };
+
+        const middleDay = displayedDays[Math.floor(displayedDays.length / 2)];
+
+        if (isSameMonth(displayedDays)) {
+            return middleDay;
+        } else {
+            return displayedDays[4];
+
         }
       );
       const person = await fetch(
