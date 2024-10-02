@@ -60,7 +60,7 @@ const Day = (props) => {
       await getUser();
     };
     fetchData();
-  }, [2]);
+  }, [props.day]);
 
   // gets the current logged in user
   async function getUser() {
@@ -153,14 +153,13 @@ const Day = (props) => {
     } else {
       console.log("Activity removed");
     }
-    const newRes = await fetch("https://localhost:7136/api/activities");
-    const newResponse = await newRes.json();
-    if (!newRes.ok) {
+    const res = await fetch("https://localhost:7136/api/users/3/activities");
+    if (!res.ok) {
       SaveActivity({
         name: "",
         xp: 0,
         date: props.day,
-        userId: 0,
+        userId: 3,
       });
     }
   }
