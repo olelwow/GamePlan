@@ -14,16 +14,6 @@
   grid-column-gap: 0px;
   grid-row-gap: 0px;
   justify-items: center;
-  background-color: rgba(119, 119, 119, 0.361);
-  background-image: url(./assets/images/Background_main.png);
-  background-size: 20em;
-  background-repeat: repeat-x;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: 1fr;
-  grid-column-gap: 0px;
-  grid-row-gap: 0px;
-  justify-items: center;
   align-items: center;
 }
 .mainPage .navbar .navbarLeft .burgerMenu {
@@ -208,8 +198,24 @@
 }
 .mainPage #dayContent .activity {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  align-content: center;
   padding-left: 0.5rem;
+}
+.mainPage #dayContent .activity .checkbox {
+  margin: 0;
+  padding: 0;
+  align-self: center;
+}
+.mainPage #dayContent .activity .xpAmount {
+  margin: 0;
+  padding: 0;
+  height: -moz-min-content;
+  height: min-content;
+  align-items: center;
+  align-self: center;
 }
 .mainPage #dayContent .buttonContainer {
   display: flex;
