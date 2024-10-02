@@ -2,6 +2,6 @@
 {
     public class UpdateUserNoteDto
     {
-        public List<string>? Notes { get; set; }
+        public string? NoteText { get; set; }
     }
 }
