@@ -14,6 +14,16 @@
   grid-column-gap: 0px;
   grid-row-gap: 0px;
   justify-items: center;
+  background-color: rgba(119, 119, 119, 0.361);
+  background-image: url(./assets/images/Background_main.png);
+  background-size: 20em;
+  background-repeat: repeat-x;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 1fr;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  justify-items: center;
   align-items: center;
 }
 .mainPage .navbar .navbarLeft .burgerMenu {
@@ -194,6 +204,11 @@
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.7), inset 0px -4px 5px 3px rgba(142, 251, 255, 0.7);
 }
 .mainPage #dayContent .activitySummary {
+  padding-left: 0.5rem;
+}
+.mainPage #dayContent .activity {
+  display: flex;
+  flex-direction: column;
   padding-left: 0.5rem;
 }
 .mainPage #dayContent .buttonContainer {
