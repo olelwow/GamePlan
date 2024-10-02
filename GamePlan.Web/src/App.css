@@ -1,6 +1,7 @@
 .mainPage {
   display: flex;
   flex-direction: column;
+  background-color: bisque;
 }
 .mainPage .navbar {
   background-color: rgba(119, 119, 119, 0.361);
@@ -200,7 +201,8 @@
   flex-direction: row;
   align-self: flex-end;
 }
-.mainPage #dayContent .buttonContainer .addButton, .mainPage #dayContent .buttonContainer .removeButton {
+.mainPage #dayContent .buttonContainer .addButton,
+.mainPage #dayContent .buttonContainer .removeButton {
   border: none;
   color: white;
   border-radius: 50%;
@@ -238,4 +240,7 @@
   background-color: rgb(66, 32, 32);
   box-shadow: inset 0px 0px 5px 1px rgba(192, 98, 98, 0.7);
   outline: 0.01rem solid rgb(77, 33, 33);
+}
+.mainPage .NoteBoard {
+  margin: 0;
 }/*# sourceMappingURL=App.css.map */
