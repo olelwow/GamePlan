@@ -20,7 +20,7 @@ const Navbar = () => {
 
   // Get user object from api
   const getUser = async () => {
-    const res = await fetch("https://localhost:7136/api/users/2");
+    const res = await fetch("http://192.168.50.149:7136/api/users/1");
     const data = await res.json();
     console.log("user data: ", data);
 
@@ -57,7 +57,7 @@ const Navbar = () => {
             </View>
             <View className="goal" style={xpBar(user.xp / 2)}>
               <Text>
-                Weekly goal: {user.xp}/{goalXp}
+                Veckans mål: {user.xp}/{goalXp}
               </Text>
             </View>
           </View>
@@ -76,10 +76,10 @@ const Navbar = () => {
 // });
 
 const xpBar = (percentage) => ({
-  backgroundColor: "rgb(255, 255, 255)",
   alignItems: "center",
   backgroundImage: `linear-gradient(to right, rgb(43, 255, 0) ${percentage}%, rgba(0, 0, 0, 0) ${percentage}%)`,
-  width: "50%",
+  backgroundColor: "rgb(255, 255, 255)",
+  width: "100%",
   borderRadius: 5,
 });
 
@@ -109,6 +109,7 @@ const styles = StyleSheet.create({
     gap: 1,
   },
   navbarCenter: {
+    gap: 7,
     flex: 2,
     alignItems: "center",
   },

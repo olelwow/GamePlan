@@ -66,6 +66,7 @@ const WeekProvider = ({ children }) => {
     for (let i = 0; i < 7; i++) {
       const date = new Date(firstDayOfWeek.getTime());
       date.setDate(firstDayOfWeek.getDate() + i);
+
       daysOfWeek.push(date);
     }
     setWeekDays(daysOfWeek);

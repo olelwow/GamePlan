@@ -6,9 +6,10 @@ import { Image, View, Text, StyleSheet, Pressable } from "react-native";
 const Day = (props) => {
   const [expandDay, setExpandDay] = useState(false);
   const [activities, setActivities] = useState([]);
+  const [currentDate, setCurrentDate] = useState("");
+  const [yo, setYo] = useState(false);
 
   const TodaysDate = () => {
-    // const date = new Date();
     const todaysDate = props.day.toLocaleDateString("sv-SE", {
       weekday: "long",
       day: "numeric",
@@ -23,7 +24,9 @@ const Day = (props) => {
     let expandedDay = true;
     if (expandDay) {
       const fetchActivities = async () => {
-        const response = await fetch("https://localhost:7136/api/activities");
+        const response = await fetch(
+          `http://192.168.50.149:7136/api/users/1/activities`
+        );
         const data = await response.json();
         if (expandedDay) {
           setActivities(data);
