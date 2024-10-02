@@ -38,10 +38,11 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    app.UseHttpsRedirection(); //moved into the if-statement, reason is for the phone app to work
+    
 }
-app.UseCors("AllowAll");
 
+app.UseCors("AllowAll");
+app.UseHttpsRedirection(); //move into the if-statement, reason is for the phone app to work
 
 // Endpoints
 app.MapActivityEndpoints();
