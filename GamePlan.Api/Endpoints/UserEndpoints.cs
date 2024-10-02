@@ -39,6 +39,12 @@ namespace GamePlan.Api.Endpoints
                 .WithTags(_tagUser)
                 .WithSummary("Endpoint to update the xp value for the user with the specified id");
 
+            app.MapPut("/api/users/{id}/notes", UpdateUserNote)
+                .WithOpenApi()
+                .WithDescription("Update user-note for user by id")
+                .WithTags(_tagUser)
+                .WithSummary("Endpoint to update user note to the database.");
+
             app.MapDelete("/api/users/{id}", DeleteUserById)
                 .WithOpenApi()
                 .WithDescription("Delete user by id")
@@ -46,7 +52,27 @@ namespace GamePlan.Api.Endpoints
                 .WithSummary("Endpoint to delete the specified user from the database.");
         }
 
-        private static async Task<IResult> UpdateUserXpById(GamePlanContext context, int id, UpdateUserXpDto userDto)
+        private static async Task<IResult> UpdateUserNote(GamePlanContext context, int id, UpdateUserNoteDto updateUserNoteDto, IValidator<UpdateUserNoteDto> validator)
+        {
+            var validationResult = await validator.ValidateAsync(updateUserNoteDto);
+            if (!validationResult.IsValid)
+            {
+                return Results.BadRequest(validationResult.Errors);
+            }
+
+            var currentUser = await context.Users.FindAsync(id);
+            if (currentUser == null)
+            {
+                return Results.NotFound($"User with id {id} not found");
+            }
+
+            currentUser.Notes = updateUserNoteDto.Notes;
+
+            await context.SaveChangesAsync();
+            return Results.Ok(currentUser);
+        }
+
+            private static async Task<IResult> UpdateUserXpById(GamePlanContext context, int id, UpdateUserXpDto userDto)
         {
             var currentUser = await context.Users.FindAsync(id);
             if (currentUser == null)
