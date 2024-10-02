@@ -138,6 +138,7 @@ const styles = StyleSheet.create({
     margin: 1,
   },
   weekNumberButton: {
+    backgroundColor: "rgb(71,134,136)",
     height: 0.5,
     aspectRatio: 1,
   },
