@@ -46,7 +46,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 
-app.UseCors("AllowAllOrigins");
+app.UseCors("AllowAll");
 
 // Endpoints
 app.MapActivityEndpoints();
