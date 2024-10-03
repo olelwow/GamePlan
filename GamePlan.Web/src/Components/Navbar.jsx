@@ -1,6 +1,5 @@
 import { useState, useEffect, useContext } from "react";
 import UserMenu from "./NavbarComponents/UserMenu";
-// import BurgerMenu from "./NavbarComponents/BurgerMenu";
 import NavbarBackground from "../assets/images/Background_main.png";
 import Week from "./Week";
 import { WeekProvider, WeekContext } from "./WeekContext";
@@ -14,6 +13,8 @@ const Navbar = (props) => {
     decreaseWeekNumber,
     month,
     setMonth,
+    toggleActivity,
+    nikos,
   } = useContext(WeekContext);
 
   const viewMonth = () => {
@@ -31,8 +32,11 @@ const Navbar = (props) => {
   };
 
   useEffect(() => {
+    user.xp = nikos.xp;
+  }, [toggleActivity]);
+
+  useEffect(() => {
     getUser();
-    console.log("using effect");
   }, []);
 
   return (
@@ -44,7 +48,13 @@ const Navbar = (props) => {
           <button className="btn-weekNumber" onClick={decreaseWeekNumber}>
             Föreg.
           </button>
+          <button className="btn-weekNumber" onClick={decreaseWeekNumber}>
+            Föreg.
+          </button>
           <span className="weekNumber"> Vecka {weekNumber}</span>
+          <button className="btn-weekNumber" onClick={increaseWeekNumber}>
+            Nästa
+          </button>
           <button className="btn-weekNumber" onClick={increaseWeekNumber}>
             Nästa
           </button>

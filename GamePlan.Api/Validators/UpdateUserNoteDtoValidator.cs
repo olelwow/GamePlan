@@ -7,19 +7,15 @@ namespace GamePlan.Api.Validators
     {
         public UpdateUserNoteDtoValidator() 
         {
-            RuleFor(n => n.Notes)
+            RuleFor(n => n.NoteText)
                 .NotNull()
-                .WithMessage("Notes cannot be null");
-
-            RuleForEach(n => n.Notes).ChildRules(notes =>
-            {
-                notes.RuleFor(note => note)
-                .NotEmpty().WithMessage("Note cannot be empty")
+                .WithMessage("Notes cannot be null")
+                .NotEmpty()
+                .WithMessage("Note cannot be empty")
                 .MaximumLength(30)
                 .WithMessage("Note cannot exceed 30 characters")
                 .Matches(@"^[a-zA-Z0-9\s,.!?åäöÅÄÖ-]*$")
                 .WithMessage("Note contains invalid characters");
-            });
         }
     }
 }

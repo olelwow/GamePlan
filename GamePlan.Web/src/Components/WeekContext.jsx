@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect } from "react";
-//skapar ett context objekt som delar veckorelaterad data mellan komponenterna
+import Navbar from "./Navbar";
+//Create a context to share week-data between components
 const WeekContext = createContext();
 
 const WeekProvider = ({ children }) => {
@@ -8,6 +9,7 @@ const WeekProvider = ({ children }) => {
   const [weekNumber, setWeekNumber] = useState(0);
   const [month, setMonth] = useState("");
   const [year, setYear] = useState(0);
+  const [nikos, setNikos] = useState({});
 
   const increaseWeekNumber = () => {
     setWeekNumber((prevState) => (prevState + 1 > 52 ? 1 : prevState + 1));
@@ -20,9 +22,9 @@ const WeekProvider = ({ children }) => {
   const changeMonth = (weekDays) => {
     const displayedDays = weekDays.map((m) => getCurrentMonth(m));
 
-    const isSameMonth = (days) => {
-      const halfLength = Math.floor(days.length / 2);
-      return days.every((value) => value === days[halfLength]);
+    const isSameMonth = (values) => {
+      const halfLength = Math.floor(values.length / 2);
+      return values.every((value) => value === values[halfLength]);
     };
 
     const middleDay = displayedDays[Math.floor(displayedDays.length / 2)];
@@ -78,6 +80,60 @@ const WeekProvider = ({ children }) => {
     getDatesOfCurrentWeek(currentWeek, currentYear);
     setYear(currentYear);
   }, []);
+
+  const toggleActivity = async (
+    activity,
+    [isChecked, setIsChecked],
+    [activities, setActivities],
+    props
+  ) => {
+    setIsChecked((prevState) => !prevState);
+
+    activity.completed = isChecked;
+    const activityXp = activity.completed && activity.xp;
+
+    const updatedActivity = {
+      ...activity,
+      completed: activity.completed,
+      date: activity.date,
+    };
+
+    await fetch(`https://localhost:7136/api/activities/${activity.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedActivity),
+    });
+
+    if (activityXp > 0) {
+      const res = await fetch(
+        `https://localhost:7136/api/users/${props.user}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ xp: activityXp }),
+        }
+      );
+
+      const person = await fetch(
+        `https://localhost:7136/api/users/${props.user}`
+      );
+      const data = await person.json();
+      setNikos(data);
+      if (res.ok) {
+        console.log("xp updated");
+      } else {
+        console.log("error updating xp");
+      }
+    }
+    setActivities(
+      activities.map((a) => (a.id === activity.id ? updatedActivity : a))
+    );
+  };
+
   //Initiates when the weekNumber is changed
   useEffect(() => {
     getDatesOfCurrentWeek(weekNumber, year);
@@ -100,6 +156,8 @@ const WeekProvider = ({ children }) => {
         setMonth,
         increaseWeekNumber,
         decreaseWeekNumber,
+        toggleActivity,
+        nikos,
       }}
     >
       {children}

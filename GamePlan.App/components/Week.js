@@ -1,5 +1,5 @@
 import Day from "./Day";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, ScrollView } from "react-native";
 import { WeekContext } from "../context/WeekContext";
 import { useContext } from "react";
 
@@ -8,9 +8,11 @@ const Week = () => {
 
   return (
     <View style={styles.weekday}>
-      {weekDays.map((day, index) => (
-        <Day key={index} day={day} />
-      ))}
+      <ScrollView>
+        {weekDays.map((day, index) => (
+          <Day key={index} day={day} />
+        ))}
+      </ScrollView>
     </View>
   );
 };
@@ -19,7 +21,8 @@ export default Week;
 
 const styles = StyleSheet.create({
   weekday: {
-    backgroundColor: 'lightgray',
-    width: '95%',
+    backgroundColor: "lightgray",
+    width: "95%",
+    maxHeight: 400,
   },
 });
