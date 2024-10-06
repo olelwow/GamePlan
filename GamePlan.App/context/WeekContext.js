@@ -21,9 +21,9 @@ const WeekProvider = ({ children }) => {
   const changeMonth = (weekDays) => {
     const displayedDays = weekDays.map((m) => getCurrentMonth(m));
 
-    const isSameMonth = (shit) => {
-      const halfLength = Math.floor(shit.length / 2);
-      return shit.every((value) => value === shit[halfLength]);
+    const isSameMonth = (days) => {
+      const halfLength = Math.floor(days.length / 2);
+      return days.every((value) => value === days[halfLength]);
     };
 
     const middleDay = displayedDays[Math.floor(displayedDays.length / 2)];
