@@ -1,42 +1,305 @@
 @mixin flexColumn {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 @mixin flexRow {
-    display: flex;
-    flex-direction: row;
+  display: flex;
+  flex-direction: row;
 }
 
-
 .mainPage {
-    @include flexColumn;
+  @include flexColumn;
+  background-color: bisque;
 
-    .navbar {
+  .navbar {
+    background-color: rgba(119, 119, 119, 0.361);
+    background-image: url(./assets/images/Background_main.png);
+    background-size: 20em;
+    background-repeat: repeat-x;
+
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 1fr;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    justify-items: center;
+    align-items: center;
+
+    .navbarLeft {
+      .burgerMenu {
+        cursor: pointer;
+      }
+    }
+
+    .navbarCenter {
+      .viewMonth {
+        text-align: center;
+        font-size: 1.8rem;
+      }
+      .goal {
         display: flex;
-        justify-content: space-around;
-        background-color: gray;
+        justify-content: center;
         align-items: center;
+        height: 2rem;
+        width: 25rem;
+        margin-bottom: 0.5rem;
+        font-weight: bold;
+        border: 2px solid black;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+      }
 
-        .navbarRight{
-            @include flexColumn;
+      .navbarWeeks {
+        display: flex;
+        justify-content: space-between;
+        flex: 1;
 
-            .userIcon{
-                width: 20px;
-                height: 20px;
-                border-radius: 100%;
-                background-color: chocolate;
-            }
-
-
+        .weekNumber {
+          font-size: 1.4rem;
+          font-weight: bold;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex: 1;
         }
+        .btn-weekNumber {
+          padding: 3px 2px;
+          border: rgba(0, 0, 0, 0.7) 1px solid;
+          border-radius: 10px;
+          background-color: #08c0fd;
+          cursor: pointer;
+          font-size: 1rem;
+          flex: 1;
+
+          &:hover {
+            background-color: #106cd0;
+          }
+        }
+      }
     }
 
-    .weekday {
+    .navbarRight {
+      @include flexColumn;
+      position: relative;
+
+      .userContainer {
         @include flexColumn;
-        justify-content: space-around;
-        background-color: lightgray;
         align-items: center;
-        gap: 10px;
-        margin: 1rem;
+
+        .userImg {
+          width: 60px;
+          aspect-ratio: 1;
+          border: 2px solid black;
+          border-radius: 50%;
+          cursor: pointer;
+        }
+
+        .userDropdown {
+          position: absolute;
+          top: -2em;
+          background-color: rgb(176, 196, 222);
+          box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+          border-radius: 4px;
+          width: 9.5rem;
+          z-index: 1;
+
+          .userInfo {
+            text-align: center;
+
+            .userDetails {
+              @include flexColumn;
+
+              hr {
+                width: 50%;
+                height: 2px;
+                border: none;
+                color: black;
+              }
+              .userH3 {
+                min-width: 3rem;
+              }
+              .userLevel {
+                @include flexRow;
+                align-items: center;
+                justify-content: space-evenly;
+
+                .levelIcon {
+                  height: 30px;
+                  aspect-ratio: 1;
+                }
+              }
+
+              .userXp {
+                @include flexRow;
+                align-items: center;
+                justify-content: space-evenly;
+                .xpIcon {
+                  height: 30px;
+                  aspect-ratio: 1;
+                  border-radius: 5px;
+                }
+              }
+
+              .tooltip {
+                position: relative;
+                display: inline-block;
+                border-bottom: 1px dotted black;
+
+                .tooltipText {
+                  visibility: hidden;
+                  width: 2rem;
+                  background-color: black;
+                  color: white;
+                  text-align: center;
+                  padding: 5px 0;
+                  border-radius: 6px;
+                  position: absolute;
+                  z-index: 1;
+                }
+
+                &:hover .tooltipText {
+                  visibility: visible;
+                }
+              }
+            }
+          }
+          .dropdownList {
+            list-style: none;
+            padding: 0;
+            text-align: center;
+
+            .dropdownItem {
+              margin-top: 0.5em;
+              padding: 0.5em;
+              background-color: rgba(240, 248, 255, 0.264);
+              border-radius: 20px;
+
+              &:hover {
+                background-color: rgb(155, 161, 166);
+              }
+            }
+          }
+        }
+      }
     }
+  }
+
+  .weekday {
+    @include flexColumn;
+    justify-content: space-around;
+    background-color: lightgray;
+    align-items: center;
+    gap: 10px;
+    margin: 1rem;
+  }
+
+  .day {
+    @include flexRow;
+    padding-left: 0.5rem;
+    width: 50%;
+    height: 2rem;
+    border: none;
+    background-color: rgb(81, 146, 148);
+    cursor: pointer;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.7),
+      inset 0px 3px 5px 3px rgba(142, 251, 255, 0.7);
+
+    .arrow {
+      width: 0.5rem;
+    }
+  }
+
+  #dayContent {
+    @include flexColumn;
+    background-color: rgb(71, 134, 136);
+
+    width: 50%;
+    padding: 0;
+    margin: -10px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    border-radius: 0 0 5px 5px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.7),
+      inset 0px -4px 5px 3px rgba(142, 251, 255, 0.7);
+
+    .activitySummary {
+      padding-left: 0.5rem;
+    }
+
+    .activity {
+      @include flexRow;
+      justify-content: space-around;
+      align-items: center;
+      align-content:center;
+      padding-left: 0.5rem;
+
+      .checkbox {
+        margin:0;
+        padding:0;
+        align-self: center;
+      }
+
+      .xpAmount{
+        margin:0;
+        padding:0;
+        height: min-content;
+        align-items: center;
+        align-self: center;
+      }
+    }
+
+    .buttonContainer {
+      @include flexRow;
+      align-self: flex-end;
+
+      .addButton,
+      .removeButton {
+        border: none;
+        color: white;
+        border-radius: 50%;
+        width: 1.2rem;
+        height: 1.2rem;
+        cursor: pointer;
+        margin: 0.5rem;
+      }
+
+      .addButton {
+        background-color: rgb(81, 148, 84);
+        box-shadow: inset 0px 0px 5px 1px rgba(98, 192, 98, 0.7);
+        outline: 0.01rem solid rgb(33, 77, 37);
+      }
+      .addButton:hover {
+        background-color: rgb(91, 185, 96);
+        box-shadow: 0px 0px 8px 3px rgba(98, 192, 98, 0.7);
+        outline: 0.01rem solid rgb(33, 77, 37);
+      }
+      .addButton:active {
+        background-color: rgb(32, 66, 34);
+        box-shadow: inset 0px 0px 5px 1px rgba(98, 192, 98, 0.7);
+        outline: 0.01rem solid rgb(33, 77, 37);
+      }
+
+      .removeButton {
+        background-color: rgb(148, 81, 81);
+        box-shadow: inset 0px 0px 5px 1px rgba(192, 98, 98, 0.7);
+        outline: 0.01rem solid rgb(77, 33, 33);
+      }
+      .removeButton:hover {
+        background-color: rgb(228, 112, 112);
+        box-shadow: 0px 0px 8px 3px rgba(192, 98, 98, 0.7);
+        outline: 0.01rem solid rgb(77, 33, 33);
+      }
+      .removeButton:active {
+        background-color: rgb(66, 32, 32);
+        box-shadow: inset 0px 0px 5px 1px rgba(192, 98, 98, 0.7);
+        outline: 0.01rem solid rgb(77, 33, 33);
+      }
+    }
+  }
+
+  .NoteBoard {
+    margin:0;  
+  }
 }

@@ -1,18 +1,19 @@
 import Day from "./Day";
+import { useContext } from "react";
+import { WeekContext } from "./WeekContext";
 
-const Week = () => {
+const Week = (props) => {
+  const { weekDays } = useContext(WeekContext);
 
-const AddActivity = () => {
-    console.log("Add activity to weekday")
-}
-
-const weekDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-
-    return(
-        <div className="weekday">
-            {weekDays.map(day => (<Day day={day}/>))}
-        </div>
-    );
-}
+  return (
+    <>
+      <div className="weekday">
+        {weekDays.map((day, index) => (
+          <Day key={index} day={day} user={props.user} />
+        ))}
+      </div>
+    </>
+  );
+};
 
 export default Week;

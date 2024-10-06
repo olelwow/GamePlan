@@ -22,21 +22,6 @@ namespace GamePlan.Api.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("ActivityUser", b =>
-                {
-                    b.Property<int>("ActivitesId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ActivitesId", "UserId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("ActivityUser");
-                });
-
             modelBuilder.Entity("GamePlan.Api.Db.Models.Activity", b =>
                 {
                     b.Property<int>("Id")
@@ -45,16 +30,24 @@ namespace GamePlan.Api.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateOnly>("Date")
-                        .HasColumnType("date");
+                    b.Property<bool>("Completed")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.Property<int?>("Xp")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Activities");
 
@@ -62,24 +55,51 @@ namespace GamePlan.Api.Migrations
                         new
                         {
                             Id = 1,
-                            Date = new DateOnly(1, 1, 1),
+                            Completed = false,
+                            Date = new DateTime(2024, 9, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Gym",
+                            UserId = 1,
                             Xp = 6969
                         },
                         new
                         {
                             Id = 2,
-                            Date = new DateOnly(1, 1, 1),
+                            Completed = false,
+                            Date = new DateTime(2024, 9, 26, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Clean bathroom",
+                            UserId = 1,
                             Xp = 6969
                         },
                         new
                         {
                             Id = 3,
-                            Date = new DateOnly(1, 1, 1),
+                            Completed = false,
+                            Date = new DateTime(2024, 9, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Study",
+                            UserId = 3,
                             Xp = 6969
                         });
+                });
+
+            modelBuilder.Entity("GamePlan.Api.Db.Models.Note", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("NoteText")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Note");
                 });
 
             modelBuilder.Entity("GamePlan.Api.Db.Models.User", b =>
@@ -133,19 +153,27 @@ namespace GamePlan.Api.Migrations
                         });
                 });
 
-            modelBuilder.Entity("ActivityUser", b =>
+            modelBuilder.Entity("GamePlan.Api.Db.Models.Activity", b =>
                 {
-                    b.HasOne("GamePlan.Api.Db.Models.Activity", null)
-                        .WithMany()
-                        .HasForeignKey("ActivitesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("GamePlan.Api.Db.Models.User", null)
-                        .WithMany()
+                        .WithMany("Activites")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("GamePlan.Api.Db.Models.Note", b =>
+                {
+                    b.HasOne("GamePlan.Api.Db.Models.User", null)
+                        .WithMany("Notes")
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("GamePlan.Api.Db.Models.User", b =>
+                {
+                    b.Navigation("Activites");
+
+                    b.Navigation("Notes");
                 });
 #pragma warning restore 612, 618
         }
